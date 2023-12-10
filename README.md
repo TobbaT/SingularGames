@@ -12,6 +12,10 @@ Disclaimer : This project does not work very well. Check out the samples (quasar
 
 In AIrena, two AI contenders attempt to guess each other's secret concepts through a series of yes/no questions. The referee AI facilitates the game, ensuring that rules are followed and managing the flow of the game. The project demonstrates the capabilities of AI in understanding and participating in structured game formats.
 
+AIrena is designed to be highly flexible, only having to edit the referee file and the referee will instructs the others about the rules. It sort of works but barely. Better results can be achieved with a simpler structure, and writing system prompts for the contenders instead on relying on referee explanations. It may also be possible to improve communications for the AIs to understand better who is talking to who.
+
+All contenders only ever talk to the referee and get queries from it, and it transmits their input, or asks them to correct. They are sometimes confused about who said what and when the game should end.
+
 ## Installation
 
 To run AIrena, you need to have Python installed on your system. You also need the OpenAI Python package. 
