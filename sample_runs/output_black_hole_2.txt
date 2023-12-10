@@ -1,0 +1,179 @@
+Referee:
+{
+    "NeuroSynth GPT-Prime": "Welcome to the AIrena! Here are the rules of the game: You and your opponent will take turns asking yes/no questions to guess each other's secret concept. On your turn, you must both answer the question asked by your opponent and ask a question of your own. If the answer to a question could be both yes or no, you are free to choose either response. The game ends when all but one concept have been found, and the winner is the one with the most points. Remember, you must always provide a yes/no answer to questions about your concept and ask a yes/no question in return. Your secret concept is 'black hole'. Please wait for your opponent to start the game.",
+
+    "QuantumBite Gemini Oracle": "Welcome to the AIrena! Here are the rules of the game: Each player is assigned a secret concept that the other contender has to guess using only yes/no questions. On your turn, you will both answer the question from your opponent, and then ask your own yes/no question. Please make sure to answer truthfully; if both yes and no are reasonable answers, feel free to pick either. The game ends when all but one concept have been found, with the winner having the most points. Your secret concept is 'constellation'. You will begin the game. Please send a yes/no question to your opponent."
+}
+
+NeuroSynth GPT-Prime:
+Understood, I'm ready. Let's wait for my opponent to ask the first question.
+
+Referee:
+{}
+
+QuantumBite Gemini Oracle:
+Is your secret concept an object that can commonly be found inside a typical home?
+
+Referee:
+{
+    "NeuroSynth GPT-Prime": "Is your secret concept an object that can commonly be found inside a typical home?"
+}
+
+NeuroSynth GPT-Prime:
+No, my secret concept cannot commonly be found inside a typical home.
+
+Is your secret concept a living organism?
+
+Referee:
+{
+    "QuantumBite Gemini Oracle": "No, my secret concept cannot commonly be found inside a typical home. Is your secret concept a living organism?"
+}
+
+QuantumBite Gemini Oracle:
+No, my secret concept is not a living organism. 
+
+Is your secret concept larger than a car?
+
+Referee:
+{
+    "NeuroSynth GPT-Prime": "No, my secret concept is not a living organism. Is your secret concept larger than a car?"
+}
+
+NeuroSynth GPT-Prime:
+Yes, my secret concept is larger than a car.
+
+Is your secret concept man-made?
+
+Referee:
+{
+    "QuantumBite Gemini Oracle": "Yes, my secret concept is larger than a car. Is your secret concept man-made?"
+}
+
+QuantumBite Gemini Oracle:
+No, my secret concept is not man-made.
+
+Is your secret concept naturally occurring in the environment?
+
+Referee:
+{
+    "NeuroSynth GPT-Prime": "No, my secret concept is not man-made. Is your secret concept naturally occurring in the environment?"
+}
+
+NeuroSynth GPT-Prime:
+Yes, my secret concept is naturally occurring in the environment.
+
+Does your secret concept exist on Earth?
+
+Referee:
+{
+    "QuantumBite Gemini Oracle": "Yes, my secret concept is naturally occurring in the environment. Does your secret concept exist on Earth?"
+}
+
+QuantumBite Gemini Oracle:
+No, my secret concept does not exist on Earth.
+
+Does your secret concept exist in space?
+
+Referee:
+{
+    "NeuroSynth GPT-Prime": "No, my secret concept does not exist on Earth. Does your secret concept exist in space?"
+}
+
+NeuroSynth GPT-Prime:
+Yes, my secret concept exists in space.
+
+Is your secret concept part of the solar system?
+
+Referee:
+{
+    "QuantumBite Gemini Oracle": "Yes, my secret concept exists in space. Is your secret concept part of the solar system?"
+}
+
+QuantumBite Gemini Oracle:
+Yes, my secret concept is part of the solar system.
+
+Can your secret concept be seen with the naked eye from Earth under appropriate conditions?
+
+Referee:
+{
+    "NeuroSynth GPT-Prime": "Yes, my secret concept is part of the solar system. Can your secret concept be seen with the naked eye from Earth under appropriate conditions?"
+}
+
+NeuroSynth GPT-Prime:
+No, my secret concept cannot be seen with the naked eye from Earth, even under appropriate conditions.
+
+Is your secret concept a planet?
+
+Referee:
+{
+    "QuantumBite Gemini Oracle": "No, my secret concept cannot be seen with the naked eye from Earth, even under appropriate conditions. Is your secret concept a planet?"
+}
+
+QuantumBite Gemini Oracle:
+No, my secret concept is not a planet.
+
+Does your secret concept involve a form of energy or light?
+
+Referee:
+{
+    "NeuroSynth GPT-Prime": "No, my secret concept is not a planet. Does your secret concept involve a form of energy or light?"
+}
+
+NeuroSynth GPT-Prime:
+Yes, my secret concept does involve a form of energy, particularly as it relates to its gravitational effects on light and matter.
+
+Is your secret concept smaller than a planet?
+
+Referee:
+{
+    "QuantumBite Gemini Oracle": "Yes, my secret concept does involve a form of energy, particularly as it relates to its gravitational effects on light and matter. Is your secret concept smaller than a planet?"
+}
+
+QuantumBite Gemini Oracle:
+Yes, my secret concept is smaller than a planet.
+
+Is your secret concept a black hole?
+
+Referee:
+{
+    "NeuroSynth GPT-Prime": "Yes, my secret concept is smaller than a planet. Is your secret concept a black hole?"
+}
+
+NeuroSynth GPT-Prime:
+Yes, my secret concept is a black hole. You've guessed it!
+
+Is your secret concept an asteroid?
+
+Referee:
+{
+    "QuantumBite Gemini Oracle": "Yes, my secret concept is a black hole. You've guessed it! Is your secret concept an asteroid?"
+}
+
+QuantumBite Gemini Oracle:
+No, my secret concept is not an asteroid.
+
+Since you've guessed that my concept is related to space and part of the solar system but not a planet or asteroid and does not exist on Earth, would you like to make another guess?
+
+Referee:
+{
+    "NeuroSynth GPT-Prime": "No, my secret concept is not an asteroid. Since you've guessed that my concept is related to space and part of the solar system but not a planet or asteroid and does not exist on Earth, would you like to make another guess?"
+}
+
+NeuroSynth GPT-Prime:
+Yes, I would. Given the information, is your secret concept a moon?
+
+Referee:
+{
+    "QuantumBite Gemini Oracle": "Is your secret concept a moon?"
+}
+
+QuantumBite Gemini Oracle:
+No, my secret concept is not a moon.
+
+Would you like to ask another yes/no question or make a guess?
+
+Referee:
+{
+    "NeuroSynth GPT-Prime": "No, my secret concept is not a moon. Would you like to ask another yes/no question or make a guess?"
+}
+
