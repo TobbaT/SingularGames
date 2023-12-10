@@ -48,6 +48,7 @@ To run AIrena, you need to have Python installed on your system. You also need t
 To run the game:
 
 ```
+source .env
 python run_arena.py
 ```
 
