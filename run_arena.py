@@ -1,6 +1,6 @@
 from airena import AIrena, ChatGPT
 
-m_gpt_4 = "gpt-4-1106-preview"
+m_gpt_4 = "gpt-4o"
 m_gpt_3 = "gpt-3.5-turbo-1106"
 
 REFEREE_GPT=m_gpt_4
