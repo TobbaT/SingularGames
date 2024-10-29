@@ -32,6 +32,8 @@ To run AIrena, you need to have Python installed on your system. You also need t
    Make sure you have `pip` installed. Then run:
 
    ```
+   python -m venv venv
+   source venv/bin/activate
    pip install -r requirements.txt
    ```
 
