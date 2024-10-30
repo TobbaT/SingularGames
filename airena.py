@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from openai import OpenAI
 import json
 import sys
+import os
 
 class AIrena:
     """
@@ -11,14 +12,22 @@ class AIrena:
         count (int): Counter to keep track of the number of iterations to prevent excessive API usage.
     """
 
+    def __init__(self):
+        self.count = 0
+
     def run_game(self, contenders, referee, global_rules):
         self.count = 0
         channels = contenders
         channels["System"] = SystemChannel()
         referee_prompt = f"{global_rules}\n\nChannels : {json.dumps(list(channels.keys()))}"
         print(referee_prompt)
-        #self.handle_referee(channels, referee, referee.push(referee_prompt))
-        data = referee.push(referee_prompt)
+
+        try:
+            data = referee.push(referee_prompt)
+        except Exception as e:
+            print(f"Error initializing game: {e}")
+            return
+
         while not channels["System"].game_over and self.count <= 20:
             self.count += 1
             data = json.loads(data["Referee"])
@@ -44,29 +53,22 @@ class Channel(ABC):
     Methods:
         push(message): Abstract method to push a message to the channel.
     """
-
     @abstractmethod
-    def push(message):
-        """Push a message to the channel."""
+    def push(self, message):
         pass
-
 
 class Participant(Channel):
     """
-    Participant in the game, can be either a referee or a contender.
+    Base class for game participants.
 
     Attributes:
         name (str): Name of the participant.
     """
-
-    def __init__(self, name) -> None:
-        super().__init__()
+    def __init__(self, name):
         self.name = name
 
     def print_chat_message(self, message):
-        """Prints the chat message."""
-        print(f"{self.name}:\n{message}\n")
-
+        print(f"{self.name}: {message}")
 
 class ChatGPT(Participant):
     """
@@ -77,11 +79,10 @@ class ChatGPT(Participant):
         client (OpenAI): OpenAI client instance.
         model (str): Model identifier for OpenAI GPT.
     """
-
     def __init__(self, name, model) -> None:
         super().__init__(name)
         self.messages = []
-        self.client = OpenAI()
+        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         self.model = model
 
     def push(self, message):
@@ -96,13 +97,17 @@ class ChatGPT(Participant):
         """
         role = "user"  # Default role for the message.
         self.messages.append({"role": role, "content": message})
-        completion = self.client.chat.completions.create(
-            model=self.model,
-            messages=self.messages)
-        response = completion.choices[0].message
-        self.print_chat_message(response.content)
-        self.messages.append(response)
-        return {self.name: response.content}
+        try:
+            completion = self.client.chat.completions.create(
+                model=self.model,
+                messages=self.messages)
+            response = completion.choices[0].message
+            self.print_chat_message(response.content)
+            self.messages.append(response)
+            return {self.name: response.content}
+        except Exception as e:
+            print(f"Error interacting with ChatGPT: {e}")
+            return {self.name: "Error"}
 
 
 class SystemChannel(Channel):
