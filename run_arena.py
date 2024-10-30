@@ -2,7 +2,7 @@ import argparse
 import os
 import logging
 from datetime import datetime
-from airena import AIrena, ChatGPT, SystemChannel
+from airena import AIrena, ChatGPT, SystemChannel, GeminiParticipant
 
 m_gpt_4 = "gpt-4o"
 m_gpt_3 = "gpt-3.5-turbo-1106"
@@ -41,8 +41,8 @@ def main():
 
     # Initialize contenders and referee
     contenders = {
-        "ChatGPT1": ChatGPT("ChatGPT1", "gpt-4o"),
-        "ChatGPT2": ChatGPT("ChatGPT2", "gpt-4o")
+        "ChatGPT": ChatGPT("ChatGPT", "gpt-4o"),
+        "Gemini": GeminiParticipant("Gemini")
     }
     referee = ChatGPT("Referee", "gpt-4o")
 
