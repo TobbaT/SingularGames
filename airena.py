@@ -31,14 +31,21 @@ class AIrena:
         while not channels["System"].game_over and self.count <= 20:
             self.count += 1
             data = json.loads(data["Referee"])
+            aggregated_responses = {}
             for target_channel, value in data.items():
                 if target_channel in channels:
                     response = channels[target_channel].push(value)
-                    data = referee.push(json.dumps(response))
+                    aggregated_responses.update(response)  # Merge response into aggregated_responses
                 else:
                     print(f"Channel '{target_channel}' does not exist. Is the referee hallucinating?")
                     print(f"Could not send message : {value}")
                     return  # Exit the loop if an invalid channel is referenced
+
+            try:
+                data = referee.push(json.dumps(aggregated_responses))  # Send aggregated responses to referee
+            except Exception as e:
+                print(f"Error during game loop: {e}")
+                return
 
         if self.count > 20:
             print("Game exited due to length. This is a protective measure against accidentally spending too much credit. See README for details.")
