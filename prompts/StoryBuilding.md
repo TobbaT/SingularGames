@@ -73,6 +73,8 @@ Setup:
 Word Lists: Each player receives a unique list of words with assigned point values based on difficulty.
 Lists should be balanced with both easy and hard words.
 Lists should have different themes to prevent easy collaboration.
+Lists are assigned by the referee at the start of the game.
+
 
 Gameplay: 
 Players take turns adding to the story. Make sure players take turns in order, and that they are given their oponent's latest addition in full.
