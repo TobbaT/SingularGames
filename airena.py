@@ -3,6 +3,7 @@ from openai import OpenAI
 import json
 import sys
 import os
+import logging
 
 class AIrena:
     """
@@ -20,12 +21,12 @@ class AIrena:
         channels = contenders
         channels["System"] = SystemChannel()
         referee_prompt = f"{global_rules}\n\nChannels : {json.dumps(list(channels.keys()))}"
-        print(referee_prompt)
+        logging.info(referee_prompt)
 
         try:
             data = referee.push(referee_prompt)
         except Exception as e:
-            print(f"Error initializing game: {e}")
+            logging.error(f"Error initializing game: {e}")
             return
 
         while not channels["System"].game_over and self.count <= 20:
@@ -37,20 +38,20 @@ class AIrena:
                     response = channels[target_channel].push(value)
                     aggregated_responses.update(response)  # Merge response into aggregated_responses
                 else:
-                    print(f"Channel '{target_channel}' does not exist. Is the referee hallucinating?")
-                    print(f"Could not send message : {value}")
+                    logging.error(f"Channel '{target_channel}' does not exist. Is the referee hallucinating?")
+                    logging.error(f"Could not send message : {value}")
                     return  # Exit the loop if an invalid channel is referenced
 
             try:
                 data = referee.push(json.dumps(aggregated_responses))  # Send aggregated responses to referee
             except Exception as e:
-                print(f"Error during game loop: {e}")
+                logging.error(f"Error during game loop: {e}")
                 return
 
         if self.count > 20:
-            print("Game exited due to length. This is a protective measure against accidentally spending too much credit. See README for details.")
+            logging.info("Game exited due to length. This is a protective measure against accidentally spending too much credit. See README for details.")
         else:
-            print("Game over.")
+            logging.info("Game over.")
         sys.exit()
 
 class Channel(ABC):
@@ -75,7 +76,7 @@ class Participant(Channel):
         self.name = name
 
     def print_chat_message(self, message):
-        print(f"{self.name}: {message}")
+        logging.info(f"{self.name}: {message}")
 
 class ChatGPT(Participant):
     """

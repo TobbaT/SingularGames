@@ -1,5 +1,7 @@
 import argparse
 import os
+import logging
+from datetime import datetime
 from airena import AIrena, ChatGPT, SystemChannel
 
 m_gpt_4 = "gpt-4o"
@@ -28,6 +30,13 @@ def main():
         print(f"Error: The game prompt file '{args.game}' does not exist in the 'prompts' folder.")
         return
 
+    # Set up logging
+    log_filename = f"outputs/{args.game}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s',
+                        handlers=[logging.FileHandler(log_filename), logging.StreamHandler()])
+
+    logging.info(f"Starting game with prompt file: {args.game}")
+
     global_rules = load_prompt(prompt_file)
 
     # Initialize contenders and referee
@@ -37,9 +46,11 @@ def main():
     }
     referee = ChatGPT("Referee", "gpt-4o")
 
-    # Run the game
+    logging.info("Game initialized with contenders and referee.")
+
+    # Create an instance of AIrena and run the game
     arena = AIrena()
     arena.run_game(contenders, referee, global_rules)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
