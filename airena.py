@@ -102,6 +102,33 @@ class GeminiParticipant(Participant):
             print(f"Error interacting with Gemini: {e}")
             return {self.name: "Error"}
 
+class Referee:
+    """
+    Referee class that wraps a Participant and logs input and output.
+
+    Attributes:
+        participant (Participant): The participant instance to wrap.
+    """
+    def __init__(self, participant):
+        self.participant = participant
+
+    def push(self, message):
+        """
+        Pushes a message to the wrapped participant and logs the input and output.
+
+        Args:
+            message (str): The message to be sent to the participant.
+
+        Returns:
+            dict: The response from the participant.
+        """
+        logging.info(f"To referee: {message}")
+        name = self.participant.name
+        raw_response = self.participant.push(message)
+        response = json.loads(raw_response[name])
+        logging.info(f"From referee: {response}")
+        return response
+
 class SystemChannel(Channel):
     """
     Special system channel to control game flow.
@@ -143,15 +170,15 @@ class AIrena:
         self.count = 0
         channels = self.initialize_channels(contenders)
         referee_prompt = self.create_referee_prompt(global_rules, channels)
-        logging.info(referee_prompt)
+        referee = Referee(referee)
 
         try:
-            data = self.initialize_game(referee, referee_prompt)
+            introduction = referee.push(referee_prompt)
         except Exception as e:
             logging.error(f"Error initializing game: {e}")
             return
 
-        self.game_loop(channels, referee, data)
+        self.game_loop(channels, referee, introduction)
 
     def initialize_channels(self, contenders):
         channels = contenders
@@ -161,27 +188,14 @@ class AIrena:
 
     def create_referee_prompt(self, global_rules, channels):
         return f"{global_rules}\n\nChannels : {json.dumps(list(channels.keys()))}"
-
-    def initialize_game(self, referee, referee_prompt):
-        data = referee.push(referee_prompt)
-        logging.info(f"Received from referee: {data}")
-        return data
-
+        
     def game_loop(self, channels, referee, data):
         while not channels["System"].game_over and self.count <= 20:
             self.count += 1
-            data = json.loads(data["Referee"])
             aggregated_responses = self.process_responses(channels, data)
-
-            if "System" in aggregated_responses:
-                logging.info(aggregated_responses["System"])
-                break
-
             try:
-                logging.info(f"Sending to referee: {json.dumps(aggregated_responses)}")
                 data = referee.push(json.dumps(aggregated_responses))
-                logging.info(f"Received from referee: {data}")
-                if channels["System"].game_over:
+                if "System" in data:
                     break
             except Exception as e:
                 logging.error(f"Error during game loop: {e}")
@@ -194,7 +208,8 @@ class AIrena:
         for target_channel, value in data.items():
             if target_channel in channels:
                 response = channels[target_channel].push(value)
-                aggregated_responses.update(response)
+                if response:
+                    aggregated_responses.update(response)
             else:
                 logging.error(f"Channel '{target_channel}' does not exist. Is the referee hallucinating?")
                 logging.error(f"Could not send message : {value}")
