@@ -1,6 +1,7 @@
 import os
 import json
 import logging
+import sys
 from abc import ABC, abstractmethod
 from openai import OpenAI
 import google.generativeai as genai
@@ -144,6 +145,29 @@ class SystemChannel(Channel):
         # Receives a system message to control the game flow.
         pass
 
+class ErrorChannel(Channel):
+    """
+    Channel to handle errors and exit the program if necessary.
+    It's content is expected to be given to the referee, giving it a chance to correct.
+
+    Attributes:
+        game_over (bool): Flag to indicate if the game is over.
+        max_errors (int): Maximum number of errors before exiting.
+    """
+
+    def __init__(self, max_errors=5):
+        self.game_over = False
+        self.messages = []
+        self.max_errors = max_errors
+
+    def push(self, message):
+        self.messages.append(message)
+        logging.error(f"Error encountered: {message}")
+        if len(self.messages) >= self.max_errors:
+            logging.error("Maximum number of errors reached. Exiting the program.")
+            sys.exit(1)
+        return {"Error": f"Errors encountered during this session, from first to last : {self.messages}" }
+
 class CommentChannel(Channel):
     """
     Channel for the referee to plan and think without impacting the game.
@@ -175,8 +199,9 @@ class AIrena:
         try:
             introduction = referee.push(referee_prompt)
         except Exception as e:
-            logging.error(f"Error initializing game: {e}")
-            return
+            err_message = f"Error initializing game. Exception raised: {e}"
+            channels["Error"].push(err_message)
+
 
         self.game_loop(channels, referee, introduction)
 
@@ -184,6 +209,7 @@ class AIrena:
         channels = contenders
         channels["System"] = SystemChannel()
         channels["Comment"] = CommentChannel()
+        channels["Error"] = ErrorChannel()
         return channels
 
     def create_referee_prompt(self, global_rules, channels):
@@ -198,9 +224,9 @@ class AIrena:
                 if "System" in data:
                     break
             except Exception as e:
-                logging.error(f"Error during game loop: {e}")
-                return
-
+                err_message = f"Error during game loop. Usually this means the program failed to process input from the Referee. Exception raised : {e}"
+                channels["Error"].push(err_message)
+                continue
         self.end_game()
 
     def process_responses(self, channels, data):
