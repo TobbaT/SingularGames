@@ -1,0 +1,66 @@
+* Singular Games Project TODOs
+
+** Moar Models
+*** TODO Huggingface?
+*** TODO Claude?
+*** TODO LangChain : explore topic
+*** TODO GPTIndex : explore topic
+
+** System
+*** TODO Renaming : airena -> SingularGames
+*** TODO Game interruptions for new instructions
+
+** Referee Features
+*** TODO Enable to summon players
+**** TODO Prompt addition
+**** TODO Add functionality to system channel
+*** TODO Enable Game selection
+**** TODO Prompt addition
+**** TODO Add functionality to system channel
+**** TODO Split game instructions into general instructions + game specific
+*** TODO Enable main code inspection by referee
+
+** 20 Questions Game with AI Players and Stack-Based Concept Generation
+*** TODO Core Idea: Use a stack-based system and a set of transformations to generate unique and potentially nonsensical concepts for a 20-questions game played by AI models.
+*** TODO Referee's Role
+**** TODO Seed the stack with initial concepts.
+**** TODO Oversee the blind transformation process.
+**** TODO Act as the referee during the 20-questions game.
+*** TODO Players' Role
+**** TODO Blindly apply transformations to the stack.
+**** TODO Receive final concepts from the stack.
+**** TODO Play the 20-questions game to guess each other's concepts.
+*** TODO Stack-Based Transformations
+**** TODO Replace: Pop the top concept and push a new one.
+**** TODO Push: Push a new concept onto the stack.
+**** TODO Combine: Pop two (or more) concepts, combine them, and push the result.
+**** TODO Unrelated: Choose a completely unrelated concept.
+**** TODO Closely Related: Choose a closely related concept.
+**** TODO More Specific: Choose a more specific example.
+**** TODO More General: Choose a broader category.
+**** TODO Opposite: Choose the opposite concept.
+**** TODO Analogous: Choose an analogous concept.
+**** TODO Part-Whole: Choose a part or the whole.
+**** TODO Contextual Shift: Choose a concept from the same context.
+**** TODO Merge: Combine elements from two concepts.
+**** TODO Hybridize: Create a hybrid of two concepts.
+**** TODO Juxtapose: Place two concepts in juxtaposition.
+*** TODO Stack Operations
+**** TODO Duplicate: Push a copy of the top concept.
+**** TODO Over: Push a copy of the second concept.
+**** TODO Swap: Swap the top two concepts.
+**** TODO Rotate: Shift the top three concepts.
+**** TODO Pick: Push a copy of the nth concept.
+*** TODO Possible Variations
+**** TODO Shared stack for players.
+**** TODO Visible top concept for players.
+**** TODO Transformation history for players.
+**** TODO Different transformation sets for players.
+**** TODO Conditional transformations.
+**** TODO Loops in transformation chains.
+*** TODO Implementation
+**** TODO Experiment with different combinations of transformations and stack operations.
+**** TODO Balance randomness and coherence in concept generation.
+**** TODO Evaluate the generated concepts and game dynamics.
+**** TODO Analyze the AI players' questioning strategies and reasoning.
+**** TODO Compare human vs. AI performance with nonsensical concepts.

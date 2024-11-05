@@ -22,22 +22,31 @@ def main():
     """
 
     parser = argparse.ArgumentParser(description="Run the AIrena game.")
+    parser.add_argument('--generic', type=str, default='GeneralInstructions.md', help='The generic prompt file to use (default: GeneralInstructions.md)')
     parser.add_argument('--game', type=str, required=True, help='The game prompt file to use (e.g., 20Questions.txt)')
     args = parser.parse_args()
 
-    prompt_file = os.path.join('prompts', args.game)
-    if not os.path.exists(prompt_file):
+    generic_prompt_file = os.path.join('prompts', args.generic)
+    game_prompt_file = os.path.join('prompts', args.game)
+
+    if not os.path.exists(generic_prompt_file):
+        print(f"Error: The generic prompt file '{args.generic}' does not exist in the 'prompts' folder.")
+        exit(1)
+
+    if not os.path.exists(game_prompt_file):
         print(f"Error: The game prompt file '{args.game}' does not exist in the 'prompts' folder.")
-        return
+        exit(1)
 
     # Set up logging
     log_filename = f"outputs/{args.game}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s',
                         handlers=[logging.FileHandler(log_filename), logging.StreamHandler()])
 
-    logging.info(f"Starting game with prompt file: {args.game}")
+    logging.info(f"Starting game with generic prompt file: {args.generic} and game prompt file: {args.game}")
 
-    global_rules = load_prompt(prompt_file)
+    generic_rules = load_prompt(generic_prompt_file)
+    game_rules = load_prompt(game_prompt_file)
+    global_rules = generic_rules + "\n" + game_rules
 
     # Initialize contenders and referee
     contenders = {
