@@ -196,14 +196,7 @@ class AIrena:
         referee_prompt = self.create_referee_prompt(global_rules, channels)
         referee = Referee(referee)
 
-        try:
-            introduction = referee.push(referee_prompt)
-        except Exception as e:
-            err_message = f"Error initializing game. Exception raised: {e}"
-            channels["Error"].push(err_message)
-
-
-        self.game_loop(channels, referee, introduction)
+        self.game_loop(channels, referee, referee_prompt)
 
     def initialize_channels(self, contenders):
         channels = contenders
@@ -214,13 +207,14 @@ class AIrena:
 
     def create_referee_prompt(self, global_rules, channels):
         return f"{global_rules}\n\nChannels : {json.dumps(list(channels.keys()))}"
-        
+
     def game_loop(self, channels, referee, data):
         while not channels["System"].game_over and self.count <= 20:
             self.count += 1
-            aggregated_responses = self.process_responses(channels, data)
             try:
-                data = referee.push(json.dumps(aggregated_responses))
+                data = referee.push(data)
+                aggregated_responses = self.process_responses(channels, data)
+                data = json.dumps(aggregated_responses)
                 if "System" in data:
                     break
             except Exception as e:
