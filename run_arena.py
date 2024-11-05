@@ -2,13 +2,10 @@ import argparse
 import os
 import logging
 from datetime import datetime
-from airena import AIrena, ChatGPT, SystemChannel, GeminiParticipant
+from airena import AIrena
+from players import ChatGPT, Gemini
 
-m_gpt_4 = "gpt-4o"
-m_gpt_3 = "gpt-3.5-turbo-1106"
 
-REFEREE_GPT=m_gpt_4
-CONTENDERS_GPT=m_gpt_4
 
 def load_prompt(file_path):
     with open(file_path, 'r') as file:
@@ -48,18 +45,18 @@ def main():
     game_rules = load_prompt(game_prompt_file)
     global_rules = generic_rules + "\n" + game_rules
 
-    # Initialize contenders and referee
-    contenders = {
+    # Initialize players and referee
+    players = {
         "ChatGPT": ChatGPT("ChatGPT", "gpt-4o"),
-        "Gemini": GeminiParticipant("Gemini")
+        "Gemini": Gemini("Gemini")
     }
     referee = ChatGPT("Referee", "gpt-4o")
 
-    logging.info("Game initialized with contenders and referee.")
+    logging.info("Game initialized with players and referee.")
 
     # Create an instance of AIrena and run the game
     arena = AIrena()
-    arena.run_game(contenders, referee, global_rules)
+    arena.run_game(players, referee, global_rules)
 
 if __name__ == "__main__":
     main()
