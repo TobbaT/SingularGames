@@ -2,95 +2,58 @@
 
 import logging
 from channels import Channel
-from openai import OpenAI
 import os
-import google.generativeai as genai
 import json
+
+from langchain_core.messages import HumanMessage
+from langchain.chains import ConversationChain
+from langchain.schema import HumanMessage
+from langgraph.checkpoint.memory import MemorySaver
+from langgraph.graph import START, MessagesState, StateGraph
+
 
 class Player(Channel):
     """
-    Abstract base class for a player in the game.
-
-    Attributes:
-        name (str): The name of the player.
+    Player class for interacting with language models using LangGraph for history management.
     """
-    def __init__(self, name):
+    def __init__(self, name, model):
+        super().__init__()
         self.name = name
-
-    def push(self, message):
-        raise NotImplementedError("The push method must be implemented by the subclass.")
-
-
-class ChatGPT(Player):
-    """
-    player using ChatGPT model.
-
-    Attributes:
-        messages (list): List of message history.
-        client (OpenAI): OpenAI client instance.
-        model (str): Model identifier for OpenAI GPT.
-    """
-    def __init__(self, name, model) -> None:
-        super().__init__(name)
-        self.messages = []
-        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         self.model = model
 
-    def push(self, message):
+        # Define the LangGraph workflow
+        self.workflow = StateGraph(state_schema=MessagesState)
+        self.workflow.add_edge(START, "model")
+        self.workflow.add_node("model", self.call_model)
+
+        # Add memory
+        self.memory = MemorySaver()
+        self.app = self.workflow.compile(checkpointer=self.memory)
+        self.config = {"configurable": {"thread_id": "abc123"}}
+
+    def call_model(self, state: MessagesState):
         """
-        Pushes a message to the ChatGPT model and retrieves the response.
-
-        Args:
-            message (str): The message to be sent to ChatGPT.
-
-        Returns:
-            dict: The response from ChatGPT.
+        Calls the language model with the current message history.
         """
-        role = "user"  # Default role for the message.
-        self.messages.append({"role": role, "content": message})
-        try:
-            completion = self.client.chat.completions.create(
-                model=self.model,
-                messages=self.messages)
-            response = completion.choices[0].message
-            self.messages.append(response)
-            return {self.name: response.content}
-        except Exception as e:
-            print(f"Error interacting with ChatGPT: {e}")
-            return {self.name: "Error"}
-
-class Gemini(Player):
-    """
-    player using the Gemini model.
-
-    Attributes:
-        messages (list): List of message history.
-        model (str): Model identifier for Gemini.
-    """
-    def __init__(self, name, model="models/gemini-pro") -> None:
-        super().__init__(name)
-        self.messages = []  # Initialize an empty list to store the conversation history
-        genai.configure(api_key=os.getenv("GEMINI_API_KEY")) 
-        self.model = genai.GenerativeModel(model)
-        self.chat = self.model.start_chat()  # Initialize the chat object
+        response = self.model.invoke(state["messages"])
+        return {"messages": response}
 
 
     def push(self, message):
         """
-        Sends a message to the Gemini model and retrieves the response.
-
-        Args:
-            message (str): The message to be sent to Gemini.
-
-        Returns:
-            dict: The response from Gemini.
+        Sends a message to the language model and retrieves the response.
         """
         try:
-            response = self.chat.send_message(message)  # Send the message using the chat object
-            return {self.name: response.text}
+            # Run the LangGraph workflow with the new message
+            inputs = [HumanMessage(content=message)]
+            result = self.app.invoke({"messages": inputs}, self.config)
+            response = result['messages'][-1].content
+            return {self.name: response}
         except Exception as e:
-            print(f"Error interacting with Gemini: {e}")
+            print(f"Error interacting with language model: {e}")
             return {self.name: "Error"}
+
+
 
 class Referee:
     """
@@ -115,6 +78,7 @@ class Referee:
         logging.info(f"To referee: {message}")
         name = self.player.name
         raw_response = self.player.push(message)
+        logging.info(f"From referee (raw): {raw_response}")
         response = json.loads(raw_response[name])
         logging.info(f"From referee: {response}")
         return response

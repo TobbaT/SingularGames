@@ -20,7 +20,6 @@ class AIrena:
         self.count = 0
         channels = self.initialize_channels(players)
         referee_prompt = self.create_referee_prompt(global_rules, channels)
-        referee = Referee(referee)
 
         self.game_loop(channels, referee, referee_prompt)
 

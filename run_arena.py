@@ -3,7 +3,9 @@ import os
 import logging
 from datetime import datetime
 from airena import AIrena
-from players import ChatGPT, Gemini
+from players import Player, Referee
+from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 
 
@@ -47,10 +49,11 @@ def main():
 
     # Initialize players and referee
     players = {
-        "ChatGPT": ChatGPT("ChatGPT", "gpt-4o"),
-        "Gemini": Gemini("Gemini")
+        "ChatGPT": Player("ChatGPT", ChatOpenAI(model="gpt-4o")),
+        "Gemini": Player("Gemini", ChatGoogleGenerativeAI(model="gemini-1.5-pro"))
     }
-    referee = ChatGPT("Referee", "gpt-4o")
+    referee = Referee(Player("Referee", ChatOpenAI(model="gpt-4o")))
+    #referee = Referee(Player("Referee", ChatGoogleGenerativeAI(model="gemini-1.5-pro")))
 
     logging.info("Game initialized with players and referee.")
 
