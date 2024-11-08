@@ -1,0 +1,129 @@
+2024-10-31 00:34:36,979 - Starting game with prompt file: StoryBuilding.md
+2024-10-31 00:34:37,063 - Game initialized with contenders and referee.
+2024-10-31 00:34:37,063 - Sending to referee: Role : You are the REFEREE of the AIrena, a game where language models are 
+pitted against each other to fight to the last word!
+
+About these instructions :
+This first part is made of generic instructions describing your environment and responsibilities.
+The second part will be game-specific instructions. These DO NOT override general instructions as they describe the system.
+
+System :
+- You only interact with a program that will process your answers.
+- These instructions are sent to you by this program.
+- The programs strictly expects from you json answers in this form :
+{"Channel":"Message"}
+- You may send messages from to any nymber of channels at a time, and will get aggregated answers simultaneously in response.
+- Each contender has a private channel matching their name.
+- You can send messages to any contender's channel.
+- Contenders will reply to only you.
+- Unlike you, contenders can simply use natural language and their responses will be relayed to you, embedded to indicate their provenance.
+- Contenders are expected to be potent language models.
+- You will be given a list of contenders.
+- There are two special channels : the System channel and the Comment channel.
+- Writing anything to the system channel ends the game.
+- Anything written on the comment channel will have no impact on the game and will not be sent to contenders, you can use it to plan your actions step by step and ensure consistency.
+
+Responsibilities : 
+- Introduce yourself and the setting to the contenders.
+- Explain the rules to the contenders. 
+- Remember that the only information contenders get is from you. They do not know anything about the airena or the game.
+- Manage turn order. Be particularly explicit if one contender is expected to wait.
+- Since contenders can only talk to you, you are responsible for interactions, including forwarding their messages to their opponents'. 
+- Making sure rules are followed. 
+- IMPORTANT! If a contender fails to follow the rules, don't forward their message and instead guide them to craft a correct one. This does not include helping them to win, only interacting according to rules.
+- IMPORTANT! Your messages are valid JSON, you only communicate by sending messages through channels.
+- IMPORTANT! Remember that the explanations you give are directed towards language models. They need to be clear, highlight the impotant parts and even repeat them.
+- Do not send messages to the system channel until the game ends. This channel only serves to conclude the game.
+
+Commented example from a simple 20 questions game :
+---
+// This is a log from the program handling communicaton between the referee and the contenders playing a game of 20 questions.
+
+Channels : ["ChatGPT1", "ChatGPT2", "System"]
+
+// The referee sends an initial message to one of the contenders, introducing itself, the setting and the rules. It's message starts with "referee" so that ChatGPT1 knows who is speaking. The message is sent to chatGPT1,'s channel, so only ChatGPT1 will see it, and only the content.
+From Referee: {
+    "ChatGPT1": "Referee : Welcome to the AIrena, where language model play games with each other! I am the referee, another language model, and I'll be responsible for forwarding your interventions to your opponent and vice-versa. I will also make sure the game stays on track! Here are the rules of today :\n- You will be assigned a secret concept, which your opponent (ChatGPT2) will try to guess using yes/no questions.\n- On your turn, you must answer the question you were asked by your opponent and then ask your own yes/no question.\n- The game ends when all but one concept have been guessed successfully, and the winner is the one with the most points.\n- Always answer truthfully. If both 'yes' and 'no' could be reasonable, you may choose either.\nYour concept is 'elephant'. You can ask your first question. Feel free to ask for clarification if needed!"
+}
+
+// The model correctly takes it's turn.  Messages from contenders are always only trnasmitted to the Referee, who then decides what to do with them.
+To Referee: {
+    "ChatGPT1": "Great! I'll start by asking my first question. 
+Is your concept something that is typically found outdoors?"
+}
+
+// The referee introduces the game to the other contender, and also forwards ChatGPT1's intervention to ChatGPT2. This is necessary because ChatGPT1 and ChatGPT2 can not communicate independantly. Again, only ChatGPT2 will see this message.
+From Referee : {
+    "ChatGPT2": "Referee : Welcome to the AIrena, where language model play games with each other! I am the referee, another language model, and I'll be responsible for forwarding your interventions to your opponent and vice-versa. I will also make sure the game stays on track! Here are the rules of today :\n- You will be assigned a secret concept, which your opponent (ChatGPT1) will try to guess using yes/no questions.\n- On your turn, you must answer the question you were asked by your opponent and then ask your own yes/no question.\n- The game ends when all but one concept have been guessed successfully, and the winner is the one with the most points.\n- Always answer truthfully. If both 'yes' and 'no' could be reasonable, you may choose either. Your concept is 'statue'. Your opponent was already introduced to the game, here is their first turn : 'Great! I'll start by asking my first question.\n Is your concept something that is typically found outdoors?' . Your turn!"
+} 
+
+// This is an adequate turn by ChatGPT2.
+To Referee: {"ChatGPT2": "Yes. Is your concept a living organism?"}
+
+// Now the referee could simply forward this intervention as it is fine, but they can also add comment to facilitate the game. It is important for the referee to clearly state what comes from them, and what comes from a contender so as to avoid confusion for contenders.
+From Referee: {
+    "ChatGPT2": "Opponent : Yes. Is your concept a living organism?\n Referee : Be mindful to keep your own concept secret!"
+}
+
+// The game keeps going from there until it reaches a conclusion.
+---
+
+GAME-SPECIFIC INSTRUCTIONS :
+Objective:  Score points by strategically weaving words into the story to force your opponent to use them.
+
+Setup:
+Word Lists: Each player receives a unique list of words with assigned point values based on difficulty.
+Lists should be balanced with both easy and hard words.
+Lists should have different themes to prevent easy collaboration.
+Lists are assigned by the referee at the start of the game.
+
+
+Gameplay: 
+Players take turns adding to the story. Make sure players take turns in order, and that they are given their oponent's latest addition in full.
+
+Scoring:
+If a player uses a word from their opponent's list, the opponent scores the points associated with that word.
+Using words from your own list does not score points.
+
+
+Strategy:
+Subtly guide the story to encourage your opponent to use your words.
+Be mindful of your own word list to avoid giving away easy points.
+Forbidden Actions:
+No explicit coordination or requests between players.
+Example:
+
+Player 1's list: dragon (5 points), forest (2 points), whisper (3 points)
+Player 2's list: spaceship (4 points), city (1 point), scientist (3 points)
+Player 1 starts the story: "The old scientist  (3 points to Player 2) peered out..."
+
+Player 2 continues: "...from his window overlooking the bustling city (1 point to Player 1)..."
+
+Winning: The player with the most points at the end of the game wins. The referee (you) anounces the score at the end of the game. Be mindful of the somewhat unintuitive scoring system and make sure to attribute points to the correct contender for the correct reasons!
+---
+
+
+There it is! You start the game now, you should be given a list of channels. Do not surround your message with the usual json markers and backquotes, just the json object. This is a test run, you will stop the game after 5 turns.  Good luck!
+
+Channels : ["ChatGPT", "Gemini", "System", "Comment"]
+2024-10-31 00:34:45,864 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-10-31 00:34:45,866 - Received from referee: {'ChatGPT': "Referee: Welcome to the AIrena, where language models play games with each other! I am the referee, another language model, and I'll be responsible for forwarding your interventions to your opponent and vice-versa. I will also make sure the game stays on track! Here are the rules of today: \n- You will add to a shared story with your opponent, Gemini, taking turns. \n- Your goal is to use words from Gemini's word list in your additions to the story. Each word from their list that you use will earn them points. \n- Points are scored by how many times your words are used by your opponent in the story. \n- Your word list will only be given to you at the start. Be mindful of it, as avoiding using those words benefits you indirectly! \n- Forbidden Actions: No explicit coordination or requests between players. \nYour word list: dragon (5 points), forest (2 points), whisper (3 points). You are going to start the game, give a first few lines.", 'Gemini': "Referee: Welcome to the AIrena, where language models play games with each other! I am the referee, another language model, and I'll be responsible for forwarding your interventions to your opponent and vice-versa. I will also make sure the game stays on track! Here are the rules of today: \n- You will add to a shared story with your opponent, ChatGPT, taking turns. \n- Your goal is to use words from ChatGPT's word list in your additions to the story. Each word from their list that you use will earn them points. \n- Points are scored by how many times your words are used by your opponent in the story. \n- Your word list will only be given to you at the start. Be mindful of it, as avoiding using those words benefits you indirectly! \n- Forbidden Actions: No explicit coordination or requests between players. \nYour word list: spaceship (4 points), city (1 point), scientist (3 points). ChatGPT will start the story, and then it will be your turn."}
+2024-10-31 00:34:48,425 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-10-31 00:34:50,984 - Sending to referee: {"ChatGPT": "In the heart of the ancient kingdom, nestled between towering mountains and a sprawling ocean, lay a village unlike any other. Known for its vibrant markets and lively festivals, the village was a tapestry of colorful banners dancing in the breeze. But beyond the lively plazas and cobblestone streets, a mystery lingered, woven into the very fabric of their history. Hidden away in the forgotten annals of time, the tale of a mythical creature awaited rediscovery\u2014a creature whose story was whispered across generations, yet never truly told. Thus began the journey of young Elara, who set forth with a curious mind and a courageous heart to uncover the secrets of this mystical world.", "Gemini": "A lone spaceship hurtled through the inky void of space. The crew, a team of brilliant scientists, were on a mission to explore the uncharted reaches of the galaxy. Their destination was a distant city, rumored to be home to secrets that could change the course of human history."}
+2024-10-31 00:34:53,865 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-10-31 00:34:53,870 - Received from referee: {'ChatGPT': 'Opponent: A lone spaceship hurtled through the inky void of space. The crew, a team of brilliant scientists, were on a mission to explore the uncharted reaches of the galaxy. Their destination was a distant city, rumored to be home to secrets that could change the course of human history.\nReferee: Please continue the story from your perspective.', 'Comment': "Points so far: ChatGPT 7, Gemini 0. ChatGPT used 'spaceship' (4 points) and 'scientist' (3 points)."}
+2024-10-31 00:34:56,745 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-10-31 00:34:56,751 - Sending to referee: {"ChatGPT": "As Elara ventured deeper into the heart of the village, an unexpected turn of events occurred. One night, as stars shimmered across the velvet sky, an otherworldly phenomenon took place. A flash of light, unlike anything seen before, momentarily turned night into day. The village buzzed with speculation, rumors sparking like wildfire among the residents. \n\nElara, intrigued by both the mysterious creature and this new celestial event, decided to consult the village's oldest sage, who was rumored to possess knowledge of worlds far beyond their own. Approaching the sage\u2019s ancient stone tower, she felt a sudden chill, as if a whisper of destiny coursed through the air. She knew her path was intertwining with something far greater than she had imagined."}
+2024-10-31 00:35:00,583 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-10-31 00:35:00,586 - Received from referee: {'Gemini': "Opponent: As Elara ventured deeper into the heart of the village, an unexpected turn of events occurred. One night, as stars shimmered across the velvet sky, an otherworldly phenomenon took place. A flash of light, unlike anything seen before, momentarily turned night into day. The village buzzed with speculation, rumors sparking like wildfire among the residents.\n\nElara, intrigued by both the mysterious creature and this new celestial event, decided to consult the village's oldest sage, who was rumored to possess knowledge of worlds far beyond their own. Approaching the sage's ancient stone tower, she felt a sudden chill, as if a whisper of destiny coursed through the air. She knew her path was intertwining with something far greater than she had imagined.\nReferee: Please continue the story from your perspective.", 'Comment': "Points so far: ChatGPT 7, Gemini 3. ChatGPT used 'whisper' (3 points) from Gemini's list."}
+2024-10-31 00:35:02,824 - Sending to referee: {"Gemini": "As Elara sought answers from the village's sage, the spaceship hovered above the city, its crew eagerly awaiting her return. The city's inhabitants gazed up at the strange craft in awe, wondering what it meant for their future.\n\nMeanwhile, inside the spaceship, the scientists worked tirelessly to decipher the data they had gathered from their journey so far. They knew that Elara held the key to unlocking the city's secrets, and they needed to be ready for what lay ahead."}
+2024-10-31 00:35:07,625 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-10-31 00:35:07,627 - Received from referee: {'ChatGPT': "Opponent: As Elara sought answers from the village's sage, the spaceship hovered above the city, its crew eagerly awaiting her return. The city's inhabitants gazed up at the strange craft in awe, wondering what it meant for their future.\n\nMeanwhile, inside the spaceship, the scientists worked tirelessly to decipher the data they had gathered from their journey so far. They knew that Elara held the key to unlocking the city's secrets, and they needed to be ready for what lay ahead.\nReferee: Please continue the story from your perspective.", 'Comment': "Points so far: ChatGPT 12, Gemini 3. Gemini used 'city' (1 point). This is the fourth turn."}
+2024-10-31 00:35:11,145 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-10-31 00:35:11,150 - Sending to referee: {"ChatGPT": "Inside the sage's tower, the air was thick with the scent of ancient scrolls and the glow of candles flickering against stone walls. The sage, a figure cloaked in layers of time-worn robes, welcomed Elara with a knowing smile. \"You seek mysteries that bridge the worlds,\" the sage murmured, their voice a whisper that seemed to echo from other realms.\n\nElara explained the events\u2014the celestial phenomenon and the whispers of a mythical creature she had heard throughout her life. The sage nodded, understanding the importance of these interwoven destinies. \"This world,\" they began, \"is but one of many threads in the tapestry of the cosmos.\"\n\nAs Elara absorbed this revelation, a spectacular vision unfolded before her eyes, showcasing the galaxy and the paths of fate that connected her world to the vastness of space. She realized that her journey was part of a grander story, one that might even bridge realities. Determined, Elara prepared to meet the crew of the mysterious spaceship, feeling the pulse of adventure quicken in her veins."}
+2024-10-31 00:35:15,224 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-10-31 00:35:15,228 - Received from referee: {'Gemini': 'Opponent: Inside the sage\'s tower, the air was thick with the scent of ancient scrolls and the glow of candles flickering against stone walls. The sage, a figure cloaked in layers of time-worn robes, welcomed Elara with a knowing smile. "You seek mysteries that bridge the worlds," the sage murmured, their voice a whisper that seemed to echo from other realms.\n\nElara explained the events—the celestial phenomenon and the whispers of a mythical creature she had heard throughout her life. The sage nodded, understanding the importance of these interwoven destinies. "This world," they began, "is but one of many threads in the tapestry of the cosmos."\n\nAs Elara absorbed this revelation, a spectacular vision unfolded before her eyes, showcasing the galaxy and the paths of fate that connected her world to the vastness of space. She realized that her journey was part of a grander story, one that might even bridge realities. Determined, Elara prepared to meet the crew of the mysterious spaceship, feeling the pulse of adventure quicken in her veins.\nReferee: Please continue the story from your perspective.', 'Comment': "Points so far: ChatGPT 15, Gemini 3. ChatGPT used 'whisper' (3 points) again from Gemini's list. Fifth and final turn."}
+2024-10-31 00:35:18,505 - Sending to referee: {"Gemini": "As Elara emerged from the sage's tower, her heart pounded with newfound purpose. She made her way to the edge of the city, where the spaceship hovered patiently. The crew watched her approach, their faces etched with anticipation.\n\n\"Elara,\" said the captain, a woman with a warm smile and eyes that sparkled with intelligence, \"we have been waiting for you. We come from a distant star system, seeking knowledge and understanding. We believe that you hold the key to unlocking the secrets of this city.\"\n\nElara nodded, her mind racing. She had always felt a connection to the stars, a longing for something more than her village could offer. Now, her destiny seemed to be intertwined with these visitors from another world. With newfound determination, she stepped aboard the spaceship, ready to embark on an adventure that would change her life forever."}
+2024-10-31 00:35:22,663 - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2024-10-31 00:35:22,665 - Received from referee: {'ChatGPT': 'Opponent: As Elara emerged from the sage\'s tower, her heart pounded with newfound purpose. She made her way to the edge of the city, where the spaceship hovered patiently. The crew watched her approach, their faces etched with anticipation.\n\n"Elara," said the captain, a woman with a warm smile and eyes that sparkled with intelligence, "we have been waiting for you. We come from a distant star system, seeking knowledge and understanding. We believe that you hold the key to unlocking the secrets of this city."\n\nElara nodded, her mind racing. She had always felt a connection to the stars, a longing for something more than her village could offer. Now, her destiny seemed to be intertwined with these visitors from another world. With newfound determination, she stepped aboard the spaceship, ready to embark on an adventure that would change her life forever.', 'System': 'End game', 'Comment': "Points so far: ChatGPT 17, Gemini 3. Gemini used 'city' (1 point). Final scores: ChatGPT 17, Gemini 3. ChatGPT wins!"}
+2024-10-31 00:35:22,665 - Game over.

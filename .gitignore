@@ -3,5 +3,9 @@
 venv/
 .clj-kondo/
 .lsp/
-outputs/
+# Ignore everything within the outputs directory
+outputs/*
+
+# But specifically allow the directory itself
+!outputs/
 .#*

@@ -1,62 +1,83 @@
+# SingularGames (formerly AIrena)
 
-# AIrena - 20 Questions Game with AI
+Welcome to SingularGames, where LLMs rival in creativity to produce memorable games. 
 
-AIrena is an interactive 20 Questions game where two AI models play against each other, with a referee AI model to oversee the game. The game is built using OpenAI's GPT models.
+**Note:** This project is undergoing a rename to SingularGames. You might still find some files and references to the old name (AIrena) as this transition is in progress.
 
-## Important Notice
-:warning: **WARNING:** Running this AIrena game involves interactions with OpenAI's GPT models which are not free. Please be aware that each game session consumes API tokens and may result in charges on your OpenAI account. It is important to understand OpenAI's pricing structure and monitor your usage to avoid unexpected costs. This project defaults to gpt-4 for all Model Players and a typical run cost around $0.50 in credits as of early december 2023. 
+**Concept:**
 
-Disclaimer : This project does not work very well. Check out the samples (quasar is ok). The prompt likely seems too complex or badly written for AIs to follow. You can swap out models by editing run_arena.py. GPT-4 is pretty much necessary for the referee as 3.5 struggles with role play. You can use your own instruction file easily also.
+The idea is simple: a Referee model is given a prompt explaining the system it evolves in, and another for game-specific rules. The referee then explains these rules to the LLM players, and they start playing! ...Usually.  This framework allows for a wide variety of games and interactions, pushing the boundaries of what LLMs can achieve in creative collaboration. (Gemini might have been a bit overenthusiastic there!)
 
-## Description
+**Description:**
 
-In AIrena, two AI Model Players attempt to guess each other's secret concepts through a series of yes/no questions. The referee AI facilitates the game, ensuring that rules are followed and managing the flow of the game. The project demonstrates the capabilities of AI in understanding and participating in structured game formats.
+SingularGames explores the capabilities of AI in understanding and participating in structured game formats. This project is a fun experiment, designed for flexibility. You can easily create custom game-specific prompts (see the examples in the `prompts` folder) using plain text or markdown (just suggestions : anything the LLM Referee understands goes). 
 
-AIrena is designed to be highly flexible, only having to edit the referee file and the referee will instructs the others about the rules. It sort of works but barely. Better results can be achieved with a simpler structure, and writing system prompts for the Model Players instead on relying on referee explanations. It may also be possible to improve communications for the AIs to understand better who is talking to who.
+**Current Status:**
 
-All Model Players only ever talk to the referee and get queries from it, and it transmits their input, or asks them to correct. They are sometimes confused about who said what and when the game should end.
+SingularGames can currently run games with 2 LLM players and a referee. The complexity of the games that can be run largely depends on the capabilities of the referee model.
 
-## Installation
+* **Successful Implementations:**  Simple games like 20 Questions run smoothly.
+* **Ongoing Challenges:** More complex games, such as the story co-building game, have encountered issues with scoring, but the core gameplay functions as intended.
 
-To run AIrena, you need to have Python installed on your system. You also need the OpenAI Python package. 
+**Roadmap:**
 
-1. **Clone the Repository**:
+* **Empower the Referee:**
+    * Provide the referee with tools to better manage and interact with the game.
+    * Enable the referee to check out the rules folder and files itself, enabling user to prompt the referee for games in natural language and enabling the referee to adapt them based on that description (eg. 20 questions game themed around LLMs)
+* **Flexible Player Management:**
+    * Allow the referee to create new players during a game. This will increase flexibility and enable games with a variable number of participants.
 
-   ```
+**Requirements:**
+
+* Python 3.8 or higher
+* pip , a python package manager 
+* An OpenAI API key
+* A Google GenAI API key
+
+**Important Note on API Usage:**
+
+SingularGames utilizes both OpenAI and Google GenAI APIs.  Please be aware that running this project will consume API tokens and may result in charges on your accounts.  
+
+* **OpenAI:** [https://www.openai.com/](https://www.openai.com/)
+* **Google GenAI:** [https://aistudio.google.com/welcome](https://aistudio.google.com/welcome)
+
+While the project currently requires both keys, the use of Langchain allows for adaptation.  Users with some technical knowledge can easily modify the constructors in `run_arena.py` to utilize different language models. Keep in mind that the project makes a fair amount of API calls with substantial context, which can impact cost.
+
+**Installation:**
+
+1. **Clone the repository:**
+
+   ```bash
    git clone https://github.com/TobbaT/airena.git
-   cd airena
    ```
 
-2. **Install Dependencies**:
+2. **Set up the environment:**
 
-   Make sure you have `pip` installed. Then run:
+First, rename .env.example to .env and set up your actual keys
 
+   ```bash
+   mv .env.example .env # Put your API keys in this file 
    ```
-   python -m venv venv
-   source venv/bin/activate
-   pip install -r requirements.txt
-   ```
+Then set up the virtual environment.
 
-3. **Setting Up Environment Variables**:
-
-   Rename the `.env.example` file to `.env` and fill in your OpenAI API key:
-
-   ```
-   OPENAI_API_KEY='your-api-key-here'
+   ```bash
+   source setup.sh # This will set up a python venv, and source your .env file as well as load dependencies from requirements.txt
    ```
 
-## Usage
+**Usage:**
 
-To run the game:
+   ```bash
+   python3 run_arena.py -game "20Questions.txt"
+   ```
 
-```
-source .env
-python run_arena.py
-```
+You can select different game rules by specifying a different file from the prompts folder. You can also add your own Game files to that folder and select them.
 
-This will initiate the game where AI models will start asking questions in turns to guess each other's secret concepts.
+The game will be displayed in console, and logged in a file under the outputs folder.
 
-## License
+**Contributing:**
 
-This project is licensed under the [MIT License](LICENSE) - see the LICENSE file for details.
+Contributions are welcome! Feel free to open issues, submit pull requests, or suggest new game ideas.
 
+**License:**
+
+This project is licensed under the MIT License - see the LICENSE file for details.
