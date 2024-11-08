@@ -49,11 +49,13 @@ def main():
 
     # Initialize players and referee
     players = {
-        "ChatGPT": Player("ChatGPT", ChatOpenAI(model="gpt-4o")),
-        "Gemini": Player("Gemini", ChatGoogleGenerativeAI(model="gemini-1.5-pro"))
+        #"ChatGPT": Player("ChatGPT", ChatOpenAI(model="gpt-4o")),
+        "Gemini_1": Player("Gemini_1", ChatGoogleGenerativeAI(model="gemini-1.5-flash")),
+        "Gemini_2": Player("Gemini_2", ChatGoogleGenerativeAI(model="gemini-1.5-flash"))
     }
-    referee = Referee(Player("Referee", ChatOpenAI(model="gpt-4o")))
+    #referee = Referee(Player("Referee", ChatOpenAI(model="gpt-4o")))
     #referee = Referee(Player("Referee", ChatGoogleGenerativeAI(model="gemini-1.5-pro")))
+    referee = Referee(Player("Referee", ChatGoogleGenerativeAI(model="gemini-1.5-flash")))
 
     logging.info("Game initialized with players and referee.")
 

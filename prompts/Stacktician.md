@@ -2,7 +2,8 @@ GAME-SPECIFIC INSTRUCTIONS
 
 Game's name is Stacktician! 
 
-The referee picks a stack of 7 diverse words.
+Remember, you are the referee!
+The referee picks a stack of 7 diverse words to make the game engaging.
 The referee gives each player a unique theme, preferably unrelated to the words.
 Each turn, a player gets to either :
   - Pick a transformation to be applied to the stack by the referee
@@ -29,6 +30,6 @@ Transformations to pick from :
     * Focus (makes half the words more specific - applies to words in the middle of the stack)
     * Scatter (makes half the words less specific - applies to words at the edges of the stack)
 
-Don't forget to communicate the rules and update the players on the state of the stack!
+Remember to communicate the rules, including available transformations, and update the players on the state of the stack!
 
-The game should end after each player has taken 5 turns. Good luck! 
+The game should end after each player has taken 5 turns : Remember to count the turns and inform the players! Good luck! 

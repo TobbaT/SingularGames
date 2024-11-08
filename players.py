@@ -4,6 +4,7 @@ import logging
 from channels import Channel
 import os
 import json
+import re
 
 from langchain_core.messages import HumanMessage
 from langchain.chains import ConversationChain
@@ -55,6 +56,8 @@ class Player(Channel):
 
 
 
+
+
 class Referee:
     """
     Referee class that wraps a player and logs input and output.
@@ -62,6 +65,7 @@ class Referee:
     Attributes:
         player (player): The player instance to wrap.
     """
+
     def __init__(self, player):
         self.player = player
 
@@ -73,12 +77,22 @@ class Referee:
             message (str): The message to be sent to the player.
 
         Returns:
-            dict: The response from the player.
+            dict: The response from the player, or None if an error occurs.
         """
         logging.info(f"To referee: {message}")
-        name = self.player.name
+
         raw_response = self.player.push(message)
-        logging.info(f"From referee (raw): {raw_response}")
-        response = json.loads(raw_response[name])
+        response_str = raw_response[self.player.name]
+
+
+        decoder = json.JSONDecoder()
+        try:
+            # Find the start of a JSON object
+            pos = response_str.index('{')  
+            response, pos = decoder.raw_decode(response_str[pos:])
+        except (ValueError, json.JSONDecodeError) as e:
+            logging.error(f"Error decoding JSON response from Referee : {e}")
+            response = None
+ 
         logging.info(f"From referee: {response}")
         return response

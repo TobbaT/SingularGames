@@ -9,7 +9,7 @@ Environment/Program :
 - These instructions, like everything else you receive, are sent to you by this program.
 - The programs strictly expects from you json answers in this form :
 {"Channel":"Message"}
-- The program expects no extra formatting, just one JSON object per answer.
+- The program expects no extra formatting (such as backticks), just one JSON object per answer to be read directly by json.loads() .
 - The JSON object will be used by the program to dispatch your messages to the relevant channels.
 - You may send messages from to any nymber of channels at a time.
 - You will get an aggregated answer from all relevant channels at once.
