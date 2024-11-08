@@ -18,17 +18,16 @@ SingularGames explores the capabilities of AI in understanding and participating
 
 * Python 3.8 or higher
 * pip , a python package manager 
-* An OpenAI API key
 * A Google GenAI API key
+* (optional) keys from other providers - requires light code changes as well at the moment.
 
 **Note on API Usage:**
 
-SingularGames utilizes both OpenAI and Google GenAI APIs.  Please be aware that running this project will consume API tokens and may result in charges on your accounts.  
+SingularGames utilizes gemini-1.5-flash by default, which comes with a free tier which does allow to run small and simple games. You can find a key there :
 
-* **OpenAI:** [https://www.openai.com/](https://www.openai.com/)
-* **Google GenAI:** [https://aistudio.google.com/welcome](https://aistudio.google.com/welcome)
+* **Gemini Flash:** [https://aistudio.google.com/welcome](https://aistudio.google.com/welcome)
 
-While the project currently requires both keys, the use of Langchain allows for adaptation.  Users with some technical knowledge can easily modify the constructors in `run_arena.py` to utilize different language models. Keep in mind that the project makes a fair amount of API calls with substantial context, which can impact cost.
+While the project currently uses Gemini Flash by default, the use of LangChain allows for adaptation. Users with some technical knowledge can easily modify the constructors in `run_arena.py` to utilize different language models. 
 
 
 ### 2. Clone the repository:
@@ -56,7 +55,9 @@ Then set up the virtual environment.
    python3 run_arena.py -game "20Questions.txt"
    ```
 
-You can select different game rules by specifying a different file from the prompts folder. You can also add your own Game files to that folder and select them.
+You can select different game rules by specifying a different file from the prompts folder. 
+You can also add your own Game files to that folder and select them.
+You can switch Model by editing this 'run_arena.py'.
 
 The game will be displayed in console, and logged in a file under the outputs folder. Sorry for the awful format at the moment.
 
