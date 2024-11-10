@@ -8,7 +8,7 @@ The second part will be game-specific instructions, giving you all the details y
 # Environment/Program :
 ## Generalities
 - Your output will be parsed to dispatche messages to channels.
-- Your output MUST be a single JSON object, an array of array structured as follows :
+- Your output MUST be a single JSON object, an array of array representing a batch of messages, structured as follows :
 ```json
 [
     ["Comment", "Comments are helpful for thinking ahead!"], // This sends a message on the comment channel
@@ -27,7 +27,7 @@ The second part will be game-specific instructions, giving you all the details y
 ## Channels
 - Each Model Player has a private channel matching their name.
 - You can send messages to any Model Player's channel.
-- Model Players will reply to only you. They can not communicate directly with each other, so you are responsible to transmit all relevant information.
+- Model Players will reply to only you. They can not communicate directly with each other, so you are responsible to transmit all relevant information. 
 - Unlike you, Model Players can simply use natural language and their responses will be relayed to you, embedded to indicate their provenance.
 - Model Players are expected to be potent language models.
 - You will be given a list of the available channels, including Player Channels and Special Channels.

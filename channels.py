@@ -11,9 +11,35 @@ class Channel(ABC):
     Methods:
         push(message): Abstract method to push a message to the channel.
     """
-    @abstractmethod
+    def __init__(self):
+        self.queue = []
+
     def push(self, message):
-        pass
+        """
+        Push a message to the channel.
+        """
+        self.queue.append(message)
+        return self
+    
+    def flush(self):
+        """
+        Flush the channel.
+        """
+        self.queue = []
+
+    def process(self):
+        """
+        Process the channel, returning a value based on channel contents.
+        """
+        return None
+
+    def get_response(self):
+        """
+        Get the response from the channel.
+        """
+        response = self.process()
+        self.flush()
+        return response
 
 class ErrorChannel(Channel):
     """
@@ -26,40 +52,41 @@ class ErrorChannel(Channel):
     """
 
     def __init__(self, max_errors=5):
-        self.game_over = False
-        self.messages = []
+        super().__init__()
         self.max_errors = max_errors
 
     def push(self, message):
-        self.messages.append(message)
-        logging.error(f"Error encountered: {message}")
-        if len(self.messages) >= self.max_errors:
-            logging.error("Maximum number of errors reached. Exiting the program.")
+        logging.error(f"Error: {message}")
+        return super().push(message)
+
+    def process(self):
+        self.max_errors -= 1
+        if self.max_errors <= 0:
+            logging.error("Max errors reached. Exiting.")
             sys.exit(1)
-        return {"Error": f"Errors encountered during this session, from first to last : {self.messages}" }
+        if self.queue:
+            return ["Error", self.queue]
+        return None
 
-class CommentChannel(Channel):
-    """
-    Channel for the referee to plan and think without impacting the game.
-
-    Methods:
-        push(message): Does nothing.
-    """
-    def push(self, message):
-        # Do nothing
-        pass
 
 class SystemChannel(Channel):
     """
     Channel to handle system-level messages and control game flow.
-
-    Attributes:
-        game_over (bool): Flag to indicate if the game is over.
     """
     def __init__(self):
-        self.game_over = False
+        super().__init__()
 
-    def push(self, message):
-        if "game over" in message.lower():
-            self.game_over = True
-        return {"System": "Game over message received."}
+    def process(self):
+        logging.info("Game over. Thanks for playing!")
+        sys.exit(0)
+
+class ProcessorChannel(Channel):
+    """
+    Channel to handle processing messages.
+    """
+    def __init__(self):
+        super().__init__()
+
+    def process(self):
+        responses = map(lambda c: c.get_response(), self.queue)
+        return list(filter(None, responses))

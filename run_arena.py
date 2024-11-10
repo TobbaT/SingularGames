@@ -2,8 +2,8 @@ import argparse
 import os
 import logging
 from datetime import datetime
-from airena import AIrena
-from players import Player, Referee
+from SingularGames import Game
+from players import Player
 from langchain_openai import ChatOpenAI
 from langchain_google_genai import ChatGoogleGenerativeAI
 
@@ -53,15 +53,14 @@ def main():
         "Gemini-flash-8b": Player("Gemini-flash-8b", ChatGoogleGenerativeAI(model="gemini-1.5-flash-8b")),
         "Gemini-flash": Player("Gemini-flash", ChatGoogleGenerativeAI(model="gemini-1.5-flash"))
     }
-    #referee = Referee(Player("Referee", ChatOpenAI(model="gpt-4o")))
-    #referee = Referee(Player("Referee", ChatGoogleGenerativeAI(model="gemini-1.5-pro")))
-    referee = Referee(Player("Referee", ChatGoogleGenerativeAI(model="gemini-1.5-flash")))
+    #referee = Player("Referee", ChatOpenAI(model="gpt-4o"))
+    #referee = Player("Referee", ChatGoogleGenerativeAI(model="gemini-1.5-pro"))
+    referee = Player("Referee", ChatGoogleGenerativeAI(model="gemini-1.5-flash"))
 
     logging.info("Game initialized with players and referee.")
 
     # Create an instance of AIrena and run the game
-    arena = AIrena()
-    arena.run_game(players, referee, global_rules)
+    Game(players, referee, global_rules).run()
 
 if __name__ == "__main__":
     main()

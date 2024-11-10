@@ -40,59 +40,21 @@ class Player(Channel):
         return {"messages": response}
 
 
-    def push(self, message):
+    def process(self):
         """
-        Sends a message to the language model and retrieves the response.
+        Process the channel, returning a value based on channel contents.
         """
+        if not self.queue:
+            return None
         try:
             # Run the LangGraph workflow with the new message
-            inputs = [HumanMessage(content=message)]
+            inputs = [HumanMessage(content=x) for x in self.queue]
             result = self.app.invoke({"messages": inputs}, self.config)
             response = result['messages'][-1].content
-            return {self.name: response}
+            return [self.name, response]
         except Exception as e:
-            print(f"Error interacting with language model: {e}")
-            return {self.name: "Error"}
+            err_message = f"Error interacting with language model: {e}"
+            #print(err_message)
+            return ["Error", err_message]
 
 
-
-
-
-class Referee:
-    """
-    Referee class that wraps a player and logs input and output.
-
-    Attributes:
-        player (player): The player instance to wrap.
-    """
-
-    def __init__(self, player):
-        self.player = player
-
-    def push(self, message):
-        """
-        Pushes a message to the wrapped player and logs the input and output.
-
-        Args:
-            message (str): The message to be sent to the player.
-
-        Returns:
-            dict: The response from the player, or None if an error occurs.
-        """
-        logging.info(f"To referee: {message}")
-
-        raw_response = self.player.push(message)
-        response_str = raw_response[self.player.name]
-
-
-        decoder = json.JSONDecoder()
-        try:
-            # Find the start of a JSON object
-            pos = response_str.index('[')  
-            response, pos = decoder.raw_decode(response_str[pos:])
-        except (ValueError, json.JSONDecodeError) as e:
-            err_message = f"Error decoding JSON response from Referee: {e}\n\tRaw response: {response_str}"
-            response = [["Error", err_message]]
- 
-        logging.info(f"From referee: {response}")
-        return response
