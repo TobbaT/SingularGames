@@ -50,11 +50,18 @@ class AIrena:
 
     def process_responses(self, channels, data):
         aggregated_responses = {}
-        for target_channel, value in data.items():
+        for message in data:
+            target_channel, value = message
             if target_channel in channels:
                 response = channels[target_channel].push(value)
                 if response:
                     aggregated_responses.update(response)
+
+        # for target_channel, value in data.items():
+        #     if target_channel in channels:
+        #         response = channels[target_channel].push(value)
+        #         if response:
+        #             aggregated_responses.update(response)
         return aggregated_responses
 
     def end_game(self):

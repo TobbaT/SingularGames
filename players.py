@@ -88,11 +88,11 @@ class Referee:
         decoder = json.JSONDecoder()
         try:
             # Find the start of a JSON object
-            pos = response_str.index('{')  
+            pos = response_str.index('[')  
             response, pos = decoder.raw_decode(response_str[pos:])
         except (ValueError, json.JSONDecodeError) as e:
-            logging.error(f"Error decoding JSON response from Referee : {e}")
-            response = None
+            err_message = f"Error decoding JSON response from Referee: {e}\n\tRaw response: {response_str}"
+            response = [["Error", err_message]]
  
         logging.info(f"From referee: {response}")
         return response

@@ -50,8 +50,8 @@ def main():
     # Initialize players and referee
     players = {
         #"ChatGPT": Player("ChatGPT", ChatOpenAI(model="gpt-4o")),
-        "Gemini_1": Player("Gemini_1", ChatGoogleGenerativeAI(model="gemini-1.5-flash")),
-        "Gemini_2": Player("Gemini_2", ChatGoogleGenerativeAI(model="gemini-1.5-flash"))
+        "Gemini-flash-8b": Player("Gemini-flash-8b", ChatGoogleGenerativeAI(model="gemini-1.5-flash-8b")),
+        "Gemini-flash": Player("Gemini-flash", ChatGoogleGenerativeAI(model="gemini-1.5-flash"))
     }
     #referee = Referee(Player("Referee", ChatOpenAI(model="gpt-4o")))
     #referee = Referee(Player("Referee", ChatGoogleGenerativeAI(model="gemini-1.5-pro")))
