@@ -1,9 +1,8 @@
 
 import json
-import sys
-from channels import ErrorChannel, Channel, SystemChannel, ProcessorChannel
-from players import Player
 import logging
+from channels import ErrorChannel, Channel, SystemChannel
+from players import Player
 
 class Game:
     """
@@ -25,7 +24,6 @@ class Game:
         self.channels["System"] = SystemChannel()
         self.channels["Comment"] = Channel()
         self.channels["Error"] = ErrorChannel()
-        self.updated_channels = ProcessorChannel()
         self.referee_prompt = self.create_referee_prompt(global_rules)
 
 
@@ -34,6 +32,7 @@ class Game:
 
     def run(self, max_iterations:int=10):
         referee_input = self.referee_prompt
+        aggregated_responses = []
         for i in range(max_iterations):
             logging.info(f"Iterations  {i} out of {max_iterations}.")
             try:
@@ -43,19 +42,20 @@ class Game:
     
             except Exception as e:
                 err_message = f"Error during game loop. Usually this means the program failed to process input from the Referee. Exception raised : {e}"
-                self.channels["Error"].push(err_message)
-                self.updated_channels.push("Error")
-                raise e
-                continue
+                err_response = self.channels["Error"].push(err_message).get_response()
+                aggregated_responses.append(err_response)
+
         logging.info(f"Game Over.")
     
     def dispatch_messages(self, messages:list[list[str]]):
+        updated_channels = []
         for message in messages:
             target_channel_name, value = message
             target_channel = self.channels.get(target_channel_name)
             if target_channel:
-                self.updated_channels.push(target_channel.push(value))
-        return self.updated_channels.get_response()
+                updated_channels.append(target_channel.push(value))
+        updated_channels = [channel.get_response() for channel in updated_channels]
+        return list(filter(None, updated_channels))
 
     def referee_act(self, message: str) -> list[str]:
         """

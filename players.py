@@ -1,14 +1,11 @@
 # players.py
-
 import logging
-from channels import Channel
 import os
 import json
 import re
 
+from channels import Channel
 from langchain_core.messages import HumanMessage
-from langchain.chains import ConversationChain
-from langchain.schema import HumanMessage
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import START, MessagesState, StateGraph
 
@@ -16,8 +13,24 @@ from langgraph.graph import START, MessagesState, StateGraph
 class Player(Channel):
     """
     Player class for interacting with language models using LangGraph for history management.
+            
+    Usage:
+        player = Player("player_name", model)
+        player.push("Hello")
+        player.push("How are you?")
+        response = player.get_response() # ["player_name", "I'm fine, thank you!"]
+        # Further calls with no new messages will return None
+        response = player.get_response() # None
     """
-    def __init__(self, name, model):
+    def __init__(self, name:str, model):
+        """
+        args:
+            name (str): The name of the player.
+            model (langchain_core.language_models.chat_models.BaseChatModel): 
+                The chat language model to be used by the player. 
+                See langchain docs for details :
+                https://langchain.readthedocs.io/en/latest/langchain_core/language_models/chat_models.html
+        """
         super().__init__()
         self.name = name
         self.model = model
@@ -25,24 +38,28 @@ class Player(Channel):
         # Define the LangGraph workflow
         self.workflow = StateGraph(state_schema=MessagesState)
         self.workflow.add_edge(START, "model")
-        self.workflow.add_node("model", self.call_model)
+        self.workflow.add_node("model", self._call_model)
 
         # Add memory
         self.memory = MemorySaver()
         self.app = self.workflow.compile(checkpointer=self.memory)
-        self.config = {"configurable": {"thread_id": "abc123"}}
+        self.config = {"configurable": {"thread_id": self.name}}
 
-    def call_model(self, state: MessagesState):
+    def _call_model(self, state: MessagesState):
         """
         Calls the language model with the current message history.
+        Do not call this method directly. See Class docstring for usage.
         """
         response = self.model.invoke(state["messages"])
         return {"messages": response}
 
 
-    def process(self):
+    def _process(self):
         """
-        Process the channel, returning a value based on channel contents.
+        The model is invoked on the messages in the queue, which are added to the state as a result.
+        This method is called by get_response() from the Channel parent class, which then flushes the queue.
+
+        Do not call this method directly. See Class docstring for usage.
         """
         if not self.queue:
             return None
