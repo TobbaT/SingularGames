@@ -27,7 +27,7 @@ SingularGames utilizes gemini-1.5-flash by default, which comes with a free tier
 
 * **Gemini Flash:** [https://aistudio.google.com/welcome](https://aistudio.google.com/welcome)
 
-While the project currently uses Gemini Flash by default, the use of LangChain allows for adaptation. Users with some technical knowledge can easily modify the constructors in `run_arena.py` to utilize different language models. 
+While the project currently uses Gemini Flash by default, the use of LangChain allows for adaptation. Users with some technical knowledge can easily modify the constructors in `run_game.py` to utilize different language models. 
 
 
 ### 2. Clone the repository:
@@ -52,12 +52,12 @@ Then set up the virtual environment.
 ### 4. Usage:
 
    ```bash
-   python3 run_arena.py -game "20Questions.txt"
+   python3 run_game.py -game "20Questions.txt"
    ```
 
 You can select different game rules by specifying a different file from the prompts folder. 
 You can also add your own Game files to that folder and select them.
-You can switch Model by editing this 'run_arena.py'.
+You can switch Model by editing this 'run_game.py'.
 
 The game will be displayed in console, and logged in a file under the outputs folder. Sorry for the awful format at the moment.
 
