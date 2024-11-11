@@ -29,7 +29,7 @@ class Player(Channel):
             model (langchain_core.language_models.chat_models.BaseChatModel): 
                 The chat language model to be used by the player. 
                 See langchain docs for details :
-                https://langchain.readthedocs.io/en/latest/langchain_core/language_models/chat_models.html
+                https://python.langchain.com/docs/concepts/chat_models/#interface
         """
         super().__init__()
         self.name = name
