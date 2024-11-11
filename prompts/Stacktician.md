@@ -25,10 +25,9 @@ Then :
 
 
 Transformations to pick from :
-    * Antonym (applicable only to odd-numbered words in the stack)
-    * Synonym (applicable only to even-numbered words in the stack)
-    * Focus (makes half the words more specific - applies to words in the middle of the stack)
-    * Scatter (makes half the words less specific - applies to words at the edges of the stack)
+    * Flip : All even numbered words turn into synonyms of themselves, while odd numbered words turn into antonyms of themselves.
+    * Focus : Words near (distance) to the target word shift in meaning towards it. Words further away, shift away in meaning from target word.
+    * Shake : Words are randomly reordered and half of them (picked randomly) get rerolled into words closer to players' themes. Shake grants 2 points. The new words should be loosely related to player' themes.
 
 Remember to communicate the rules, including available transformations, and update the players on the state of the stack!
 
