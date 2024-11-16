@@ -47,13 +47,14 @@ class Game:
 
         logging.info(f"Game Over.")
     
-    def dispatch_messages(self, messages:list[list[str]]):
+    def dispatch_messages(self, messages:list[list]):
         updated_channels = []
         for message in messages:
-            target_channel_name, value = message
-            target_channel = self.channels.get(target_channel_name)
-            if target_channel:
-                updated_channels.append(target_channel.push(value))
+            target_channel_names, value = message
+            for target_channel_name in target_channel_names:
+                target_channel = self.channels.get(target_channel_name)
+                if target_channel:
+                    updated_channels.append(target_channel.push(value))
         updated_channels = [channel.get_response() for channel in updated_channels]
         return list(filter(None, updated_channels))
 

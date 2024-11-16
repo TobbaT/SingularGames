@@ -24,6 +24,17 @@
 **** DONE Update all code to reflect new data structure
 **** DONE Update General instruction prompt
 
+** Journal
+*** DONE [2024-11-16 Sat] Message system overhaul
+Old system :
+[Channel, Message]
+New system :
+[[Channels], Messages...]
+- Messages can be sent to multiple Channels
+**** DONE  SingularGames.py : update message processing function
+**** DONE  prompts/GeneralInstructions.md : update message format
+**** TODO  Opther prompt files : update examples to reflect new format?
+**** TODO  Improve explanation for mutli channel messages.
 
 ** Cancelled
 *** GPTIndex : explore topic

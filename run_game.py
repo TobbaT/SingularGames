@@ -15,6 +15,15 @@ def load_prompt(file_path):
 
 def main():
     """
+    
+    Run a game of SingularGames with specified prompt files.
+
+    Example usage with Stacktician.md and default general instructions:
+
+    ```bash
+    python3 run_game.py --game Stacktician.md 
+    ```
+
     WARNING: Running this AIrena game involves making calls to OpenAI's GPT models, which may incur costs.
     Please be aware that each game session can consume a significant amount of API tokens, leading to charges
     on your OpenAI account. Ensure you are familiar with OpenAI's pricing structure before running this game.
