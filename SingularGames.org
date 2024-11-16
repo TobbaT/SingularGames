@@ -1,7 +1,8 @@
 * Singular Games Project TODOs
 
 ** Journal
-*** TODO [2024-11-16 Sat] Enable referee Requests
+
+*** DONE [2024-11-16 Sat] Enable referee Requests
 **** Rationale : Referee can request players to do something
 Peviously referee would send messages, the messages would be queued, 
 and all channels would be processed at the end of the batch.
@@ -17,9 +18,7 @@ Then the queued messages are processed and sent to the LLM.
 ***** DONE Channel.flush : delete unused method
 ***** DONE Player.push : current default is to just queue, switching to only process None as last message.
 ***** DONE GeneralInstructions.md : update to reflec changes
-***** TODO Review channel logic. If only players queue messages, do we need a queue in the base Channel?   
-***** TODO  review : maybe all channels queued, and referee handles response logic.
-***** TODO Review Player error handling. What happens to the history if the LLM request fails? 
+
 *** DONE [2024-11-16 Sat] Message system overhaul
 Old system :
 [Channel, Message]
@@ -32,10 +31,12 @@ New system :
 **** DONE  Improve explanation for mutli channel messages.
 
 ** General
+*** TODO Review channel logic. If only players queue messages, do we need a queue in the base Channel?   
+*** TODO Review : maybe all channels queued, and referee handles response logic.
+*** TODO Review Player error handling. What happens to the history if the LLM request fails? 
 
 
 ** System
-*** TODO Renaming : airena -> SingularGames
 *** TODO Game interruptions for new instructions
 
 
@@ -49,6 +50,7 @@ New system :
 *** TODO Enable main code inspection by referee
 
 ** Archived
+*** DONE Renaming : airena -> SingularGames
 *** DONE LangChain : explore topic
 *** DONE Split game instructions into general instructions + game specific
 *** DONE Switch data structure from {"channel":"Message",...} to [["channel","Message"],...]

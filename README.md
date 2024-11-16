@@ -46,13 +46,14 @@ First, rename .env.example to .env and set up your actual keys
 Then set up the virtual environment.
 
    ```bash
-   source setup.sh # This will set up a python venv, and source your .env file as well as load dependencies from requirements.txt
+   make setup # This will set up a python venv, and source your .env file as well as load dependencies from requirements.txt
    ```
 
 ### 4. Usage:
 
    ```bash
-   python3 run_game.py -game "20Questions.txt"
+   make run # runs a default game
+   python3 run_game.py -game "20Questions.txt" # run a specific game
    ```
 
 You can select different game rules by specifying a different file from the prompts folder. 
