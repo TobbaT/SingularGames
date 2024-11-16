@@ -23,7 +23,7 @@ class Player(Channel):
         response = player.push(None)  # Processes the queue and returns the result
         print(response)  # [["player_name"], "I'm fine, thank you!"]
     """
-     def __init__(self, 
+    def __init__(self, 
                  name:str, model,
                  process_condition=process_on_None):
         """
@@ -71,7 +71,7 @@ class Player(Channel):
             return None
         try:
             # Run the LangGraph workflow with the new message
-            inputs = [HumanMessage(content=x) for x in self.queue]
+            inputs = [HumanMessage(content=x) for x in self.queue if x is not None]
             # TODO : Do messages get saved when there is an error contacting the model?
             # This impacts how to handle errors : if yes, then we want to flush before calling again.
             result = self.app.invoke({"messages": inputs}, self.config)

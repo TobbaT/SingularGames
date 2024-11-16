@@ -35,15 +35,16 @@ class Game:
         aggregated_responses = []
         for i in range(max_iterations):
             logging.info(f"Iterations  {i} out of {max_iterations}.")
-            try:
-                messages = self.referee_act(referee_input)
+            # Sending prompt/aggregated_answers to the referee
+            ref_response = self.referee_act(referee_input)
+            if isinstance(ref_response, str):
+                aggregated_responses = [err_message(ref_response)]
+            else:
+                messages = ref_response
                 aggregated_responses = self.dispatch_messages(messages)
-                referee_input = json.dumps(aggregated_responses)
+            
+            referee_input = json.dumps(aggregated_responses)
     
-            except Exception as e:
-                err_str = f"Error during game loop. Usually this means the program failed to process input from the Referee. Exception raised : {e}"
-                err_response = self.channels["Error"].push(err_str)
-                aggregated_responses.append(err_response)
 
         logging.info(f"Game Over.")
     
@@ -76,7 +77,8 @@ class Game:
             message (str): The message to be sent to the player.
 
         Returns:
-            list[str]: The response from the player, or an error message if decoding fails.
+            The response from the referee, a batch of messages to be dispatched.
+            [[[channel_name], "response"], ...]
         """
         logging.info(f"To referee: {message}")
 
@@ -90,8 +92,8 @@ class Game:
             pos = response_str.index('[')  
             response, pos = decoder.raw_decode(response_str[pos:])
         except (ValueError, json.JSONDecodeError) as e:
-            err_message = f"Error decoding JSON response from Referee: {e}\n\tRaw response: {response_str}"
-            response = [["Error", err_message]]
+            err_str = f"Error decoding JSON response from Referee: {e}\n\tRaw response: {response_str}"
+            response = err_str
 
         logging.info(f"From referee: {response}")
         return response
