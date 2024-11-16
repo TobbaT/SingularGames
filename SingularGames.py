@@ -1,7 +1,7 @@
 
 import json
 import logging
-from channels import ErrorChannel, Channel, SystemChannel
+from channels import ErrorChannel, Channel, SystemChannel, err_message, message_to
 from players import Player
 
 class Game:
@@ -41,22 +41,31 @@ class Game:
                 referee_input = json.dumps(aggregated_responses)
     
             except Exception as e:
-                err_message = f"Error during game loop. Usually this means the program failed to process input from the Referee. Exception raised : {e}"
-                err_response = self.channels["Error"].push(err_message).get_response()
+                err_str = f"Error during game loop. Usually this means the program failed to process input from the Referee. Exception raised : {e}"
+                err_response = self.channels["Error"].push(err_str)
                 aggregated_responses.append(err_response)
 
         logging.info(f"Game Over.")
     
     def dispatch_messages(self, messages:list[list]):
-        updated_channels = []
+        aggregated_responses = []
         for message in messages:
             target_channel_names, value = message
             for target_channel_name in target_channel_names:
                 target_channel = self.channels.get(target_channel_name)
                 if target_channel:
-                    updated_channels.append(target_channel.push(value))
-        updated_channels = [channel.get_response() for channel in updated_channels]
-        return list(filter(None, updated_channels))
+                    response = target_channel.push(value)
+                    if response:
+                        aggregated_responses.append(response)
+                else:    
+                    err_str = f"Error: Channel {target_channel_name} not found."
+                    err_str += f"\n\tMessage: {value}"
+                    err_str += f"\n\tAvailable Channels: {json.dumps(list(self.channels.keys()))}"
+                    err_response = self.channels["Error"].push(err_str)
+                    aggregated_responses.append(err_response)
+        return aggregated_responses
+
+        
 
     def referee_act(self, message: str) -> list[str]:
         """
@@ -71,7 +80,8 @@ class Game:
         """
         logging.info(f"To referee: {message}")
 
-        raw_response = self.referee.push(message).get_response()
+        self.referee.push(message)
+        raw_response = self.referee.push(None)
         sender, response_str = raw_response
 
         decoder = json.JSONDecoder()

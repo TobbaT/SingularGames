@@ -1,5 +1,34 @@
 * Singular Games Project TODOs
 
+** Journal
+*** TODO [2024-11-16 Sat] Enable referee Requests
+**** Rationale : Referee can request players to do something
+Peviously referee would send messages, the messages would be queued, 
+and all channels would be processed at the end of the batch.
+Now, channels process their messages by default immediately. 
+However, Players only queue messages, until a None message is received. 
+Then the queued messages are processed and sent to the LLM.
+**** Implementation
+***** DONE SingularGames.py : 
+- replace get_response usage
+- condiionally add response on push, if not none. 
+***** DONE Channel.get_response : remove unused method, now send special message instead
+***** DONE Channel.push : default is to process queued
+***** DONE Channel.flush : delete unused method
+***** DONE Player.push : current default is to just queue, switching to only process None as last message.
+***** TODO GeneralInstructions.py : update to reflec changes
+***** TODO Review channel logic. If only players queue messages, do we need a queue in the base Channel?   
+***** TODO Review Player error handling. What happens to the history if the LLM request fails? 
+*** DONE [2024-11-16 Sat] Message system overhaul
+Old system :
+[Channel, Message]
+New system :
+[[Channels], Messages...]
+- Messages can be sent to multiple Channels
+**** DONE  SingularGames.py : update message processing function
+**** DONE  prompts/GeneralInstructions.md : update message format
+**** TODO  Opther prompt files : update examples to reflect new format?
+**** TODO  Improve explanation for mutli channel messages.
 
 ** General
 
@@ -7,6 +36,7 @@
 ** System
 *** TODO Renaming : airena -> SingularGames
 *** TODO Game interruptions for new instructions
+
 
 ** Referee Features
 *** TODO Enable to summon players
@@ -24,17 +54,6 @@
 **** DONE Update all code to reflect new data structure
 **** DONE Update General instruction prompt
 
-** Journal
-*** DONE [2024-11-16 Sat] Message system overhaul
-Old system :
-[Channel, Message]
-New system :
-[[Channels], Messages...]
-- Messages can be sent to multiple Channels
-**** DONE  SingularGames.py : update message processing function
-**** DONE  prompts/GeneralInstructions.md : update message format
-**** TODO  Opther prompt files : update examples to reflect new format?
-**** TODO  Improve explanation for mutli channel messages.
 
 ** Cancelled
 *** GPTIndex : explore topic

@@ -4,42 +4,63 @@ import logging
 import sys
 from abc import ABC, abstractmethod
 
+def message(channels, value):
+    """
+    Helper function to create a message for dispatching.
+
+    Messages will be either sent to the Referee or to the dispatcher.
+    Messages for the referee should indicate their provenance. e.g. [["ChatGPT"], "Hello, referee!"]
+    Messages for the dispatcher should indicate the target channels (recipient). e.g. [["ChatGPT", "Gemini-flash"], "Referee : Hello, players!"]
+    """
+    return [channels, value]
+
+def message_from(channel, value):
+    """
+    Helper function to create a message for dispatching from a single channel.
+    """
+    return message([channel], value)
+
+def message_to(channels, value):
+    """
+    Helper function to create a message for dispatching to multiple channels.
+    """
+    return message(channels, value)
+
+def err_message(value):
+    """
+    Helper function to create an error message for dispatching.
+    """
+    return message_from("Error", value)
+
 class Channel(ABC):
     """
     Abstract base class for a communication channel.
 
     Methods:
+        __init__(process_condition:list=>bool): Constructor for the channel. Always process by default.
         push(message): Abstract method to push a message to the channel.
     """
-    def __init__(self):
+    def __init__(self, process_condition=lambda x: True):
         self.queue = []
+        self.process_condition = process_condition
 
     def push(self, message):
         """
-        Push a message to the channel.
+        Push a message to the channel, potentially trigerring _process().
         """
         self.queue.append(message)
-        return self
-    
-    def flush(self):
-        """
-        Flush the channel.
-        """
-        self.queue = []
+        if self.process_condition(self.queue):
+            response = self._process()
+            self.queue = []
+            return response
+        return None
 
     def _process(self):
         """
         Process the channel, returning a value based on channel contents.
+        Should be implemented by subclasses.
         """
         return None
-
-    def get_response(self):
-        """
-        Get the response from the channel.
-        """
-        response = self._process()
-        self.flush()
-        return response
 
 class ErrorChannel(Channel):
     """
@@ -65,7 +86,7 @@ class ErrorChannel(Channel):
             logging.error("Max errors reached. Exiting.")
             sys.exit(1)
         if self.queue:
-            return ["Error", self.queue]
+            return err_message(self.queue)
         return None
 
 
