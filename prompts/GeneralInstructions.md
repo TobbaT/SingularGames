@@ -30,6 +30,7 @@ The second part will be game-specific instructions, giving you all the details y
   - Messages sent to Gemini : will be queued but Gemini won't answer yet.
   - Messages sent to ChatGPT : ChatGPT will answer, taking into account all queued messages
 ## Channels
+- You will be given a complete list of channels as the game starts.
 - Most channels (called basic channels) will process messages immediately on receptions.
 - Some channels (called queued channels), notably players channels, will instead queue messages until null is sent.
 ```json
@@ -55,6 +56,7 @@ The second part will be game-specific instructions, giving you all the details y
 
 ### Players channels
 - Player channels are queued channels.
+- Some players may have similar names, but they are different players!
 - Each Model Player has a private channel matching their name.
 - You can send messages to any Model Player's channel.
 - Model Players will reply to only you. They can not communicate directly with each other, so you are responsible to transmit all relevant information. 

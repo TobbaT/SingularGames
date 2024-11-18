@@ -8,8 +8,11 @@ Here is how it goes (suggested order to make the game simple) :
 - The player takes a guess
 - The referee uses the tool to compare.
 - The tool replies to the referee
-- The referee assign points, and asks the next player for a guess.
+- The referee assign points, and gives a turn to the next player (cycling through in order). 
 This continue until the end, or a player gets close enough (above 0.95)
+
+TIP : Wait for the tool to actually answer to assign any point. Tool will only answer after your batch.
+TIP : avoid calling the tool and giving a player a turn in one batch. This makes the game simpler to manage.
 
 Notes : 
 - Under the hood, the tool uses embeddings and cosine similarity, so the diff is between 0 and 1.
@@ -17,6 +20,8 @@ Notes :
 - Players score based on how much they improve on the previous best, between 0 (same or less) and 3 (more than 0.2 above previous best).
 - The first player close enough gets an extra 5 points.
 - Maximum of 5 turns per player.
+- The name of the tool for comparison is "sentence_diff".
+
 
 Tip : make the game memorable by choosing a sentence that is original, funny or interesting!
 
@@ -26,7 +31,6 @@ Information management :
 
 Tool use :
 - In order to use a tool, the referee uses a non already existant channel of choice prefixed by "tool_call-". (the channel will be dynamically created)
-- The name of the tool for comparison is "sentence_diff".
 - Example usage :
 ```json
 [
