@@ -19,18 +19,18 @@ help:
 
 # Setup target to create the virtual environment and install dependencies
 setup: $(VENV_NAME)/bin/activate
-$(VENV_NAME)/bin/activate: setup.sh requirements.txt
+$(VENV_NAME)/bin/activate: .env requirements.txt
 	@echo "Creating virtual environment..."
 	python3 -m venv $(VENV_NAME)
 	@echo "Installing dependencies..."
 	$(VENV_ACTIVATE) && pip install -r requirements.txt
-	@echo "Sourcing setup.sh..."
+	@echo "Sourcing .env..."
 	$(VENV_ACTIVATE) && source .env
 	touch $(VENV_NAME)/bin/activate
 
 # Run target to execute the game with the specified file
 run: setup
-	$(VENV_ACTIVATE) && python3 run-game.py -game 'Stacktician.md'
+	$(VENV_ACTIVATE) && python3 run_game.py --game 'CloseEnough.md'
 
 # Clean target to remove generated files and the virtual environment
 clean:

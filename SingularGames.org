@@ -2,6 +2,19 @@
 
 ** Journal
 
+*** DONE [2024-11-18 Mon] Close enough! New game 
+**** Rationale : what is behind the embedding?
+The referee picks a sentence, and the players have to guess the sentence.
+The referee has access to a tool that computes the difference between two sentences using an embedding model.   
+When players make a guess, the referee uses the tool and informs the players of the score
+Players earn points based on how much closer they are than the previous best guess.
+The player reaching the threshold first gets bonus points.
+**** Implementation
+***** DONE Rule file
+***** DONE Embedding tool 
+***** DONE game loop update
+**** Issues
+***** TODO referee doesn't wait for tool output.
 *** DONE [2024-11-16 Sat] Enable referee Requests
 **** Rationale : Referee can request players to do something
 Peviously referee would send messages, the messages would be queued, 
@@ -34,7 +47,7 @@ New system :
 *** TODO Review channel logic. If only players queue messages, do we need a queue in the base Channel?   
 *** TODO Review : maybe all channels queued, and referee handles response logic.
 *** TODO Review Player error handling. What happens to the history if the LLM request fails? 
-
+*** TODO Fix:Makefile ??
 
 ** System
 *** TODO Game interruptions for new instructions

@@ -1,8 +1,10 @@
 
 import json
 import logging
-from channels import ErrorChannel, Channel, SystemChannel, err_message, message_to
+from channels import ErrorChannel, Channel, SystemChannel, err_message, message_to, message_from
 from players import Player
+from SentenceDiff import compare_sentences_google
+
 
 class Game:
     """
@@ -25,6 +27,9 @@ class Game:
         self.channels["Comment"] = Channel()
         self.channels["Error"] = ErrorChannel()
         self.referee_prompt = self.create_referee_prompt(global_rules)
+        self.tools = {
+            "sentence_diff": compare_sentences_google 
+        }
 
 
     def create_referee_prompt(self, global_rules):
@@ -44,18 +49,23 @@ class Game:
                 aggregated_responses = self.dispatch_messages(messages)
             
             referee_input = json.dumps(aggregated_responses)
-    
-
         logging.info(f"Game Over.")
     
+    # TODO: split this into many methods
     def dispatch_messages(self, messages:list[list]):
         aggregated_responses = []
         for message in messages:
-            target_channel_names, value = message
+            target_channel_names, *value = message
             for target_channel_name in target_channel_names:
                 target_channel = self.channels.get(target_channel_name)
                 if target_channel:
-                    response = target_channel.push(value)
+                    response = target_channel.push(value[0])
+                    if response:
+                        aggregated_responses.append(response)
+                elif target_channel_name.startswith("tool_call-"):
+                    tool_name = value[0]
+                    tool = self.tools[tool_name]
+                    response = message_from(target_channel_name, tool(*value[1:]))
                     if response:
                         aggregated_responses.append(response)
                 else:    

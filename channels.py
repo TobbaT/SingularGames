@@ -100,3 +100,4 @@ class SystemChannel(Channel):
     def _process(self):
         logging.info("Game over. Thanks for playing!")
         sys.exit(0)
+
