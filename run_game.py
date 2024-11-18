@@ -57,11 +57,11 @@ def main():
     global_rules = generic_rules + "\n" + game_rules
 
     # Initialize players and referee
-    players = {
-        #"ChatGPT": Player("ChatGPT", ChatOpenAI(model="gpt-4o")),
-        "Gemini-flash-8b": Player("Gemini-flash-8b", ChatGoogleGenerativeAI(model="gemini-1.5-flash-8b")),
-        "Gemini-flash": Player("Gemini-flash", ChatGoogleGenerativeAI(model="gemini-1.5-flash"))
-    }
+    players = [
+        #Player("ChatGPT", ChatOpenAI(model="gpt-4o")),
+        Player("Gemini-flash-8b", ChatGoogleGenerativeAI(model="gemini-1.5-flash-8b")),
+        Player("Gemini-flash", ChatGoogleGenerativeAI(model="gemini-1.5-flash"))
+    ]
     #referee = Player("Referee", ChatOpenAI(model="gpt-4o"))
     #referee = Player("Referee", ChatGoogleGenerativeAI(model="gemini-1.5-pro"))
     referee = Player("Referee", ChatGoogleGenerativeAI(model="gemini-1.5-flash"))

@@ -2,6 +2,19 @@
 
 ** Journal
 
+*** DONE [2024-11-18 Mon] Refactor channel to simplify logic.
+**** Rationale : The current channel logic is a bit convoluted.
+Old system : Rube Goldberg machine
+New system : Simple and clean
+- A channel is a pair of a name and function 
+- channels built from players's push method and name 
+- comment channel returns None 
+- channel is a function that takes a message and returns a message
+
+**** Implementation
+***** DONE Player.py : implement the queue system.
+***** DONE SingularGames.py : update to reflect new channel system
+***** DONE Channel.py : delete EVERYTHING
 *** DONE [2024-11-18 Mon] Close enough! New game 
 **** Rationale : what is behind the embedding?
 The referee picks a sentence, and the players have to guess the sentence.
@@ -44,10 +57,11 @@ New system :
 **** DONE  Improve explanation for mutli channel messages.
 
 ** General
-*** TODO Review channel logic. If only players queue messages, do we need a queue in the base Channel?   
-*** TODO Review : maybe all channels queued, and referee handles response logic.
 *** TODO Review Player error handling. What happens to the history if the LLM request fails? 
 *** TODO Fix:Makefile ??
+*** TODO Fix instructions 
+- Clarify tool usage
+- Tool usage should be in general instructions, only the specific tool should be in the game instructions
 
 ** System
 *** TODO Game interruptions for new instructions

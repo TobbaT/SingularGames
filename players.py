@@ -4,7 +4,7 @@ import os
 import json
 import re
 
-from channels import Channel, err_message, message_from
+from messages import err_message, message_from
 from langchain_core.messages import HumanMessage
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import START, MessagesState, StateGraph
@@ -12,7 +12,7 @@ from langgraph.graph import START, MessagesState, StateGraph
 def process_on_None(queue: list) -> bool:
     return queue and queue[-1] is None
 
-class Player(Channel):
+class Player():
     """
     Player class for interacting with language models using LangGraph for history management.
             
@@ -35,10 +35,10 @@ class Player(Channel):
                 See langchain docs for details :
                 https://python.langchain.com/docs/concepts/chat_models/#interface
         """
-        super().__init__()
         self.process_condition = process_condition
         self.name = name
         self.model = model
+        self.queue = []
 
         # Define the LangGraph workflow
         self.workflow = StateGraph(state_schema=MessagesState)
@@ -59,6 +59,22 @@ class Player(Channel):
         response = self.model.invoke(state["messages"])
         return {"messages": response}
 
+    def push(self, message):
+        """
+        Push a message to the player, potentially triggering the processing of the queue.
+        args:
+            message (str): The message to be pushed to the player.
+        returns:
+            response (str): The response from the player. 
+        """
+        if message is None:
+            response = self._process()
+            self.queue = []
+            return response
+        else:
+            self.queue.append(message)
+            return None
+
 
     def _process(self):
         """
@@ -71,7 +87,7 @@ class Player(Channel):
             return None
         try:
             # Run the LangGraph workflow with the new message
-            inputs = [HumanMessage(content=x) for x in self.queue if x is not None]
+            inputs = [HumanMessage(content=x) for x in self.queue]
             # TODO : Do messages get saved when there is an error contacting the model?
             # This impacts how to handle errors : if yes, then we want to flush before calling again.
             result = self.app.invoke({"messages": inputs}, self.config)
