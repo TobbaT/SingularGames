@@ -25,12 +25,11 @@ $(VENV_NAME)/bin/activate: .env requirements.txt
 	@echo "Installing dependencies..."
 	$(VENV_ACTIVATE) && pip install -r requirements.txt
 	@echo "Sourcing .env..."
-	$(VENV_ACTIVATE) && source .env
 	touch $(VENV_NAME)/bin/activate
 
 # Run target to execute the game with the specified file
 run: setup
-	$(VENV_ACTIVATE) && python3 run_game.py --game 'CloseEnough.md'
+	$(VENV_ACTIVATE) && source .env && python3 run_game.py --game 'CloseEnough.md'
 
 # Clean target to remove generated files and the virtual environment
 clean:

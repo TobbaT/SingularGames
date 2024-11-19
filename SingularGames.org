@@ -57,8 +57,11 @@ New system :
 **** DONE  Improve explanation for mutli channel messages.
 
 ** General
-*** TODO Review Player error handling. What happens to the history if the LLM request fails? 
+*** TODO Model selection made easy.
+*** TODO Game vizualization
+*** TODO Refactor Message (use explicit dictionary)
 *** TODO Fix:Makefile ??
+- run command does not set api key. Does it set the venv properly?
 *** TODO Fix instructions 
 - Clarify tool usage
 - Tool usage should be in general instructions, only the specific tool should be in the game instructions

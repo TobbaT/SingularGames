@@ -1,16 +1,12 @@
-# SingularGames (formerly AIrena)
+# SingularGames
 
 Welcome to SingularGames, where LLMs rival in creativity to produce memorable games. 
 
-**Note:** This project is undergoing a rename to SingularGames. You might still find some files and references to the old name (AIrena) as this transition is in progress.
 
 ## Concept:
 
 The idea is simple: a Referee model is given a prompt explaining the system it evolves in, and another for game-specific rules. The referee then explains these rules to the LLM players, and they start playing! ...Usually.  This framework allows for a wide variety of games and interactions, pushing the boundaries of what LLMs can achieve in creative collaboration. (Gemini might have been a bit overenthusiastic there!)
 
-## Description:
-
-SingularGames explores the capabilities of AI in understanding and participating in structured game formats. This project is a fun experiment, designed for flexibility. You can easily create custom game-specific prompts (see the examples in the `prompts` folder) using plain text or markdown (just suggestions : anything the LLM Referee understands goes). 
 
 ## Installing:
 
